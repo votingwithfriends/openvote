@@ -35,7 +35,7 @@ export class CommentResolver {
       pollId,
       userId,
       comment_text,
-    });
+    }).save();
     return comment;
   }
 }
