@@ -23,6 +23,10 @@ export class Poll extends BaseEntity {
   is_open: boolean;
   default: true;
 
+  @Field()
+  @Column()
+  title: string;
+
   @ManyToOne(() => User, (user) => user.polls) user: User;
   @OneToMany(() => Comment, (comment) => comment.poll) comments: Comment[];
 }
