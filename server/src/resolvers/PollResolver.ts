@@ -31,8 +31,15 @@ export class PollResolver {
 
   //   Mutations
   @Mutation(() => Poll)
-  async addPoll(@Arg("is_open") is_open: boolean, @Arg("title") title: string) {
-    const poll = Poll.create({ is_open, title }).save();
+  async addPoll(
+    // @Ctx() { req }: Context,
+    @Arg("is_open") is_open: boolean,
+    @Arg("title") title: string,
+    @Arg("userId") userId: number
+  ) {
+    const poll = Poll.create({ is_open, title, userId }).save();
+
+    // console.log(req);
     return poll;
   }
 }
