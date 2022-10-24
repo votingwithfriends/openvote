@@ -62,7 +62,7 @@ export class PollResolver {
   //   delete poll
   @Mutation(() => Poll)
   async deletePoll(@Arg("id") id: number) {
-    const data = Poll.delete({ id });
+    const data = await Poll.delete({ id });
     return data;
   }
 }

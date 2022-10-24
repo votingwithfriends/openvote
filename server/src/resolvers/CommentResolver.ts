@@ -52,4 +52,11 @@ export class CommentResolver {
       return null;
     }
   }
+
+  //   delete comment
+  @Mutation(() => Comment)
+  async deleteComment(@Arg("id") id: number) {
+    const data = await Comment.delete({ id });
+    return data;
+  }
 }
