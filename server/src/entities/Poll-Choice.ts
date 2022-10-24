@@ -1,5 +1,12 @@
-import { Entity, BaseEntity, Column, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Entity,
+  BaseEntity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+} from "typeorm";
 import { ObjectType, Field, Int } from "type-graphql";
+import { Poll } from "./Poll";
 
 // Define the poll-choice entity
 @ObjectType()
@@ -11,9 +18,7 @@ export class Choice extends BaseEntity {
 
   @Field()
   @Column()
-  poll_id: number;
-
-  @Field()
-  @Column()
   title: string;
+
+  @ManyToOne(() => Poll, (poll) => poll.choice) poll: Poll;
 }
