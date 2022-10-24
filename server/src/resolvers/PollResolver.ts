@@ -32,6 +32,7 @@ export class PollResolver {
   }
 
   //   Mutations
+  // add poll
   @Mutation(() => Poll)
   async addPoll(
     @Arg("is_open") is_open: boolean,
@@ -56,5 +57,12 @@ export class PollResolver {
       console.log(error);
       return null;
     }
+  }
+
+  //   delete poll
+  @Mutation(() => Poll)
+  async deletePoll(@Arg("id") id: number) {
+    const data = Poll.delete({ id });
+    return data;
   }
 }

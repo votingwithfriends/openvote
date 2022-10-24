@@ -36,5 +36,6 @@ export class Comment extends BaseEntity {
   @Field()
   @Column({ nullable: true })
   pollId: number;
-  @ManyToOne(() => Poll, (poll) => poll.comments) poll: Poll;
+  @ManyToOne(() => Poll, (poll) => poll.comments, { onDelete: "CASCADE" })
+  poll: Poll;
 }
