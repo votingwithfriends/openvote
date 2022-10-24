@@ -26,6 +26,15 @@ export class Comment extends BaseEntity {
   @CreateDateColumn()
   created_at: Date;
 
+  @Field()
+  @Column({
+    nullable: true,
+  })
+  userId: number;
   @ManyToOne(() => User, (user) => user.comments) user: User;
+
+  @Field()
+  @Column({ nullable: true })
+  pollId: number;
   @ManyToOne(() => Poll, (poll) => poll.comments) poll: Poll;
 }

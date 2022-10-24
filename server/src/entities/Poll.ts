@@ -5,6 +5,7 @@ import {
   PrimaryGeneratedColumn,
   ManyToOne,
   OneToMany,
+  JoinColumn,
 } from "typeorm";
 import { ObjectType, Field, Int } from "type-graphql";
 import { User } from "./User";
@@ -28,7 +29,15 @@ export class Poll extends BaseEntity {
   @Column()
   title: string;
 
-  @ManyToOne(() => User, (user) => user.polls) user: User;
+  @Field()
+  @Column({
+    nullable: true,
+  })
+  userId: number;
+  @ManyToOne(() => User, (user) => user.polls)
+  @JoinColumn({ name: "userId" })
+  user: User;
+
   @OneToMany(() => Comment, (comment) => comment.poll) comments: Comment[];
   @OneToMany(() => Choice, (choice) => choice.poll) choice: Choice[];
 }
