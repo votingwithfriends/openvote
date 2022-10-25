@@ -4,14 +4,26 @@ import {
   Mutation,
   Arg,
   //   ObjectType,
-  //   Field,
+  InputType,
+  Field,
   Ctx,
 } from "type-graphql";
+// import { UpdateDateColumn } from "typeorm";
 // import { User } from "../entities/User";
 import { Comment } from "../entities/Comment";
 import { Context } from "../types/Context";
 // import { sendRefreshToken } from "../utility/sendRefreshToken";
 import { verify } from "jsonwebtoken";
+
+@InputType()
+class UpdateCommentInput {
+  @Field()
+  comment_text: string;
+
+  //   @Field()
+  //   @UpdateDateColumn()
+  //   created_at: Date;
+}
 
 //   Comment Resolver
 @Resolver()
@@ -51,6 +63,19 @@ export class CommentResolver {
       console.log(error);
       return null;
     }
+  }
+
+  //   update comment
+  @Mutation(() => Comment)
+  async updateComment(
+    @Arg("id") id: number,
+    @Arg("data") data: UpdateCommentInput
+  ) {
+    const comment = await Comment.findOne({ where: { id } });
+    if (!comment) throw new Error("Book not found!");
+    Object.assign(comment, data);
+    await comment.save();
+    return comment;
   }
 
   //   delete comment

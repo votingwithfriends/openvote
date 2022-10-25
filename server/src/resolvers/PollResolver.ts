@@ -26,7 +26,7 @@ export class PollResolver {
   @Query(() => Poll)
   poll(@Arg("id") id: number) {
     return Poll.findOne({
-      where: { id: id },
+      where: { id },
       relations: ["comments.poll"],
     });
   }
