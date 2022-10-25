@@ -4,9 +4,11 @@ import {
   Column,
   PrimaryGeneratedColumn,
   ManyToOne,
+  OneToMany,
 } from "typeorm";
 import { ObjectType, Field, Int } from "type-graphql";
 import { Poll } from "./Poll";
+import { Vote } from "./Choice-Vote";
 
 // Define the poll-choice entity
 @ObjectType()
@@ -21,4 +23,5 @@ export class Choice extends BaseEntity {
   title: string;
 
   @ManyToOne(() => Poll, (poll) => poll.choice) poll: Poll;
+  @OneToMany(() => Vote, (vote) => vote.choice) vote: Vote[];
 }
