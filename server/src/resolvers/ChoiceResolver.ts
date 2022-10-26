@@ -18,8 +18,8 @@ export class ChoiceResolver {
 
   // Create a Choice
   @Mutation(() => Choice)
-  async addChoice(@Arg("title") title: string) {
-    const choice = Choice.create({ title }).save();
+  async addChoice(@Arg("title") title: string, @Arg("pollId") pollId: number) {
+    const choice = Choice.create({ title, pollId }).save();
     return choice;
   }
 }

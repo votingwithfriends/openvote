@@ -1,3 +1,4 @@
+import { AppDataSource } from "../db/connection";
 import {
   Resolver,
   Query,
@@ -27,6 +28,16 @@ export class PollResolver {
   @Query(() => Poll)
   poll(@Arg("id") id: number) {
     return Poll.findOne({ where: { id: id } });
+  }
+
+  @Query(() => Poll)
+  findPoll() {
+    return AppDataSource.getRepository(Poll)
+      .createQueryBuilder()
+      .select("p")
+      .from(Poll, "p")
+      .where("p.id = :pollId", { pollId: 1 })
+      .getOne();
   }
 
   //   Mutations

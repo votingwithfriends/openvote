@@ -1,5 +1,5 @@
-import { Vote } from "src/entities/Choice-Vote";
-import { Arg, Mutation, Query, Resolver } from "type-graphql";
+import { Vote } from "../entities/Choice-Vote";
+import { Arg, Query, Resolver } from "type-graphql";
 
 @Resolver()
 export class VoteResolver {
