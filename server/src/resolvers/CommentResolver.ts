@@ -65,14 +65,14 @@ export class CommentResolver {
     }
   }
 
-  //   update comment
+  //   update comment text
   @Mutation(() => Comment)
   async updateComment(
     @Arg("id") id: number,
     @Arg("data") data: UpdateCommentInput
   ) {
     const comment = await Comment.findOne({ where: { id } });
-    if (!comment) throw new Error("Book not found!");
+    if (!comment) throw new Error("Comment not found!");
     Object.assign(comment, data);
     await comment.save();
     return comment;

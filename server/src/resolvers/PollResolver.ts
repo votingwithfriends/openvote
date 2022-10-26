@@ -4,13 +4,27 @@ import {
   Mutation,
   Arg,
   //   ObjectType,
-  //   Field,
+  Field,
+  InputType,
   Ctx,
 } from "type-graphql";
 // import { User } from "../entities/User";
 import { Poll } from "../entities/Poll";
 import { Context } from "../types/Context";
 import { verify } from "jsonwebtoken";
+
+@InputType()
+class UpdatePollInput {
+  @Field()
+  title: string;
+
+  @Field()
+  is_open: boolean;
+
+  //   @Field()
+  //   @UpdateDateColumn()
+  //   created_at: Date;
+}
 
 // Poll Resolver
 @Resolver()
@@ -57,6 +71,19 @@ export class PollResolver {
       console.log(error);
       return null;
     }
+  }
+
+  //   update poll title
+  @Mutation(() => Poll)
+  async updatePoll(@Arg("id") id: number, @Arg("data") data: UpdatePollInput) {
+    const poll = await Poll.findOne({
+      where: { id },
+      relations: ["comments.poll"],
+    });
+    if (!poll) throw new Error("Poll not found!");
+    Object.assign(poll, data);
+    await poll.save();
+    return poll;
   }
 
   //   delete poll
