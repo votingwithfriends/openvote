@@ -5,6 +5,7 @@ import {
   PrimaryGeneratedColumn,
   ManyToOne,
   CreateDateColumn,
+  UpdateDateColumn,
 } from "typeorm";
 import { ObjectType, Field, Int } from "type-graphql";
 import { Poll } from "./Poll";
@@ -25,6 +26,10 @@ export class Comment extends BaseEntity {
   @Field()
   @CreateDateColumn()
   created_at: Date;
+
+  @Field()
+  @UpdateDateColumn()
+  updated_at: Date;
 
   @Field()
   @Column({
