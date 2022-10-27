@@ -31,12 +31,12 @@ export class PollResolver {
   }
 
   @Query(() => Poll)
-  findPoll() {
+  findPoll(@Arg("id") id: number) {
     return AppDataSource.getRepository(Poll)
       .createQueryBuilder()
       .select("p")
       .from(Poll, "p")
-      .where("p.id = :pollId", { pollId: 1 })
+      .where("p.id = :pollId", { pollId: id })
       .getOne();
   }
 
