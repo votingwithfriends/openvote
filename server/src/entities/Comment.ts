@@ -5,6 +5,7 @@ import {
   PrimaryGeneratedColumn,
   ManyToOne,
   CreateDateColumn,
+  UpdateDateColumn,
 } from "typeorm";
 import { ObjectType, Field, Int } from "type-graphql";
 import { Poll } from "./Poll";
@@ -27,6 +28,10 @@ export class Comment extends BaseEntity {
   created_at: Date;
 
   @Field()
+  @UpdateDateColumn()
+  updated_at: Date;
+
+  @Field()
   @Column({
     nullable: true,
   })
@@ -36,5 +41,6 @@ export class Comment extends BaseEntity {
   @Field()
   @Column({ nullable: true })
   pollId: number;
-  @ManyToOne(() => Poll, (poll) => poll.comments) poll: Poll;
+  @ManyToOne(() => Poll, (poll) => poll.comments, { onDelete: "CASCADE" })
+  poll: Poll;
 }
