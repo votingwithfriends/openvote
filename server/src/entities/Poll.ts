@@ -40,6 +40,5 @@ export class Poll extends BaseEntity {
 
   @OneToMany(() => Comment, (comment) => comment.poll)
   comments: Comment[];
-  @OneToMany(() => Comment, (comment) => comment.poll) comments: Comment[];
   @OneToMany(() => Choice, (choice) => choice.poll) choice: Choice[];
 }
