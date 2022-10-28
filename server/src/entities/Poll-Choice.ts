@@ -27,7 +27,7 @@ export class Choice extends BaseEntity {
   @Column()
   @JoinColumn({ name: "pollId" })
   pollId: number;
-  @ManyToOne(() => Poll, (poll) => poll.choice)
+  @ManyToOne(() => Poll, (poll) => poll.choices)
   poll: Poll;
 
   @OneToMany(() => Vote, (vote) => vote.choice) vote: Vote[];

@@ -40,6 +40,16 @@ export class PollResolver {
       .getOne();
   }
 
+  // get poll with choices
+  @Query(() => Poll)
+  findPollAndChoices(@Arg("id") id: number) {
+    return AppDataSource.getRepository(Poll)
+      .createQueryBuilder("p")
+      .leftJoinAndSelect("p.choices", "c")
+      .where("p.id = :pollId", { pollId: id })
+      .getOne();
+  }
+
   //   Mutations
   @Mutation(() => Poll)
   async addPoll(
