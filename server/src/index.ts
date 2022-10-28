@@ -28,7 +28,7 @@ const PORT = process.env.SERVER_PORT;
 
   // Unique route to request a new refresh token
   app.post("/refresh_token", async (req, res) => {
-    const token = req.cookies.snippadID;
+    const token = req.cookies.vwfOV;
     if (!token) {
       return res.send({ ok: false, accessToken: "" });
     }
