@@ -10,6 +10,7 @@ import {
 import { ObjectType, Field, Int } from "type-graphql";
 import { User } from "./User";
 import { Comment } from "./Comment";
+import { Choice } from "./Poll-Choice";
 
 //   Define Poll entity
 @ObjectType()
@@ -39,4 +40,6 @@ export class Poll extends BaseEntity {
 
   @OneToMany(() => Comment, (comment) => comment.poll)
   comments: Comment[];
+  @OneToMany(() => Comment, (comment) => comment.poll) comments: Comment[];
+  @OneToMany(() => Choice, (choice) => choice.poll) choice: Choice[];
 }
