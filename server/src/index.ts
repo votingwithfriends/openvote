@@ -8,7 +8,7 @@ import path from "path";
 import { verify } from "jsonwebtoken";
 import { User } from "./entities/User";
 import { sendRefreshToken } from "./utility/sendRefreshToken";
-import { createAccessToken } from "./auth";
+import { createAccessToken, createRefreshToken } from "./auth";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 
@@ -49,7 +49,7 @@ const PORT = process.env.SERVER_PORT;
       return res.send({ ok: false, accessToken: "" });
     }
 
-    sendRefreshToken(res, token);
+    sendRefreshToken(res, createRefreshToken(user));
     return res.send({ ok: true, accessToken: createAccessToken(user) });
   });
 

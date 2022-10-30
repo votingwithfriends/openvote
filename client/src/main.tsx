@@ -18,6 +18,7 @@ const requestLink = new ApolloLink(
   (operation, forward) =>
     new Observable((observer) => {
       let handle: any;
+      // Send access token in response header
       Promise.resolve(operation)
         .then((operation) => {
           const accessToken = getAccessToken();

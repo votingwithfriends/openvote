@@ -1,11 +1,18 @@
 import { useState } from "react";
 import { Container } from "../Container";
 import { RiMenuLine, RiCloseLine } from "react-icons/ri";
+import { useMeQuery } from "../../generated/graphql";
 import { Link } from "react-router-dom";
 
 export const Header: React.FC = () => {
+  // Get user currently logged in
+  const { loading, data } = useMeQuery({ fetchPolicy: "network-only" });
   // Mobile menu state
   const [mobileMenu, setMobileMenu] = useState<Boolean>(false);
+
+  if (loading) {
+    return <div>loading</div>;
+  }
 
   return (
     <header className="bg-black text-white relative">
@@ -17,6 +24,7 @@ export const Header: React.FC = () => {
           <div onClick={() => setMobileMenu(true)}>
             <RiMenuLine fontSize={26} />
           </div>
+          <p>{data?.me?.username}</p>
         </nav>
       </Container>
 
@@ -35,29 +43,38 @@ export const Header: React.FC = () => {
           >
             <RiCloseLine fontSize={40} />
           </div>
-          <ul
-            onClick={() => setMobileMenu(false)}
-            className="flex flex-col gap-y-6 text-3xl font-bold"
-          >
-            <li>
-              <Link to="/login">Login</Link>
-            </li>
-            <li>
-              <Link to="/signup">Sign Up</Link>
-            </li>
-          </ul>
-          <div className="my-12 h-0.5 bg-neutral-800"></div>
-          <ul
-            onClick={() => setMobileMenu(false)}
-            className="flex flex-col font-bold text-xl gap-y-6"
-          >
-            <li>
-              <Link to="/about">About</Link>
-            </li>
-            <li>
-              <Link to="/contact">Contact</Link>
-            </li>
-          </ul>
+          <div onClick={() => setMobileMenu(false)}>
+            {data && data.me ? (
+              <ul className="flex flex-col gap-y-6 font-bold">
+                <li>
+                  <Link className="text-3xl" to="/">
+                    {data.me?.username}
+                  </Link>
+                </li>
+                <li>
+                  <p>Logout</p>
+                </li>
+              </ul>
+            ) : (
+              <ul className="flex flex-col gap-y-6 text-3xl font-bold">
+                <li>
+                  <Link to="/login">Login</Link>
+                </li>
+                <li>
+                  <Link to="/signup">Sign Up</Link>
+                </li>
+              </ul>
+            )}
+            <div className="my-12 h-0.5 bg-neutral-800"></div>
+            <ul className="flex flex-col font-bold text-xl gap-y-6">
+              <li>
+                <Link to="/about">About</Link>
+              </li>
+              <li>
+                <Link to="/contact">Contact</Link>
+              </li>
+            </ul>
+          </div>
         </section>
       </div>
     </header>
