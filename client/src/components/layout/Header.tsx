@@ -6,7 +6,8 @@ import { Link } from "react-router-dom";
 
 export const Header: React.FC = () => {
   // Get user currently logged in
-  const { loading, data } = useMeQuery({ fetchPolicy: "network-only" });
+  const { loading, data } = useMeQuery();
+
   // Mobile menu state
   const [mobileMenu, setMobileMenu] = useState<Boolean>(false);
 
@@ -24,13 +25,12 @@ export const Header: React.FC = () => {
           <div onClick={() => setMobileMenu(true)}>
             <RiMenuLine fontSize={26} />
           </div>
-          <p>{data?.me?.username}</p>
         </nav>
       </Container>
 
       {/* Mobile Menu */}
       <div
-        className={`absolute right-0 transition-all ease-out duration-700 ${
+        className={`absolute right-0 transition-all ease-out duration-300 ${
           mobileMenu
             ? "translate-x-0 opacity-100"
             : "translate-x-full opacity-0"

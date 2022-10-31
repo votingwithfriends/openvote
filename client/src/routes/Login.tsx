@@ -46,7 +46,9 @@ export const Login: React.FC = () => {
         }}
       >
         <div className="flex flex-col gap-y-4">
-          {loginError && <span>Incorrect email or password</span>}
+          {loginError && (
+            <span className="text-rose-500">Incorrect email or password</span>
+          )}
           <input
             type="email"
             placeholder="email"
