@@ -46,23 +46,13 @@ export class PollResolver {
     });
   }
 
-  @Query(() => Poll)
-  findPoll(@Arg("id") id: number) {
-    return AppDataSource.getRepository(Poll)
-      .createQueryBuilder()
-      .select("p")
-      .from(Poll, "p")
-      .where("p.id = :pollId", { pollId: id })
-      .getOne();
-  }
-
   // get poll with choices
   @Query(() => Poll)
-  findPollAndChoices(@Arg("id") id: number) {
+  getPollAndChoices(@Arg("id") id: number) {
     return AppDataSource.getRepository(Poll)
-      .createQueryBuilder("poll")
-      .leftJoinAndSelect("poll.choices", "choice")
-      .where("poll.id = :pollId", { pollId: id })
+      .createQueryBuilder("p")
+      .leftJoinAndSelect("p.choices", "c")
+      .where("p.id = :pollId", { pollId: id })
       .getOne();
   }
 
