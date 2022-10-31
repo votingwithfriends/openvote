@@ -60,9 +60,9 @@ export class PollResolver {
   @Query(() => Poll)
   findPollAndChoices(@Arg("id") id: number) {
     return AppDataSource.getRepository(Poll)
-      .createQueryBuilder("p")
-      .leftJoinAndSelect("p.choices", "c")
-      .where("p.id = :pollId", { pollId: id })
+      .createQueryBuilder("poll")
+      .leftJoinAndSelect("poll.choices", "choice")
+      .where("poll.id = :pollId", { pollId: id })
       .getOne();
   }
 
