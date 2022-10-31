@@ -7,11 +7,12 @@ import {
   Field,
   InputType,
   Ctx,
+  UseMiddleware,
 } from "type-graphql";
 // import { User } from "../entities/User";
 import { Poll } from "../entities/Poll";
 import { Context } from "../types/Context";
-import { verify } from "jsonwebtoken";
+import { isAuth } from "../utility/isAuth";
 
 @InputType()
 class UpdatePollInput {
@@ -40,32 +41,27 @@ export class PollResolver {
   @Query(() => Poll)
   poll(@Arg("id") id: number) {
     return Poll.findOne({
-      where: { id },
       relations: ["comments.poll"],
+      where: { id },
     });
   }
-
   //   Mutations
   // add poll
   @Mutation(() => Poll)
+  @UseMiddleware(isAuth)
   async addPoll(
     @Arg("is_open") is_open: boolean,
     @Arg("title") title: string,
     // get token information
-    @Ctx() context: Context
+    @Ctx() { payload }: Context
   ) {
-    const authorization = context.req.headers["authorization"];
-    if (!authorization) {
-      return null;
-    }
-    // Verify token and get payload
     try {
-      const token = authorization.split(" ")[1];
-      const payload: any = verify(token, process.env.ACCESS_TOKEN_SECRET!);
-      console.log(payload);
-      const userId = payload.userId;
       //   create poll
-      const poll = Poll.create({ is_open, title, userId }).save();
+      const poll = Poll.create({
+        is_open,
+        title,
+        userId: parseInt(payload!.userId),
+      }).save();
       return poll;
     } catch (error) {
       console.log(error);

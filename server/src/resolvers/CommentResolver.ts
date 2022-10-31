@@ -7,13 +7,11 @@ import {
   InputType,
   Field,
   Ctx,
+  UseMiddleware,
 } from "type-graphql";
-// import { UpdateDateColumn } from "typeorm";
-// import { User } from "../entities/User";
+import { isAuth } from "../utility/isAuth";
 import { Comment } from "../entities/Comment";
 import { Context } from "../types/Context";
-// import { sendRefreshToken } from "../utility/sendRefreshToken";
-import { verify } from "jsonwebtoken";
 
 @InputType()
 class UpdateCommentInput {
@@ -38,24 +36,17 @@ export class CommentResolver {
   //   MUTATIONS
   //   create a comment
   @Mutation(() => Comment)
+  @UseMiddleware(isAuth)
   async addComment(
     @Arg("pollId") pollId: number,
     @Arg("comment_text") comment_text: string,
-    @Ctx() context: Context
+    @Ctx() { payload }: Context
   ) {
-    const authorization = context.req.headers["authorization"];
-    if (!authorization) {
-      return null;
-    }
     // Verify token and get payload
     try {
-      const token = authorization.split(" ")[1];
-      const payload: any = verify(token, process.env.ACCESS_TOKEN_SECRET!);
-      console.log(payload);
-      const userId = payload.userId;
       const comment = Comment.create({
         pollId,
-        userId,
+        userId: parseInt(payload!.userId),
         comment_text,
       }).save();
       return comment;
