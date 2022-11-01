@@ -6,6 +6,7 @@ import {
   ManyToOne,
   CreateDateColumn,
   UpdateDateColumn,
+  JoinColumn,
 } from "typeorm";
 import { ObjectType, Field, Int } from "type-graphql";
 import { Poll } from "./Poll";
@@ -36,11 +37,14 @@ export class Comment extends BaseEntity {
     nullable: true,
   })
   userId: number;
-  @ManyToOne(() => User, (user) => user.comments) user: User;
+  @ManyToOne(() => User, (user) => user.comments)
+  @JoinColumn({ name: "userId" })
+  user: User;
 
   @Field()
   @Column({ nullable: true })
   pollId: number;
   @ManyToOne(() => Poll, (poll) => poll.comments, { onDelete: "CASCADE" })
+  @JoinColumn({ name: "pollId" })
   poll: Poll;
 }
