@@ -34,5 +34,5 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Comment, (comment) => comment.user) comments: Comment[];
   @OneToMany(() => Poll, (poll) => poll.user) polls: Poll[];
-  @OneToMany(() => Vote, (vote) => vote.user) vote: Vote[];
+  @OneToMany(() => Vote, (vote) => vote.user) votes: Vote[];
 }

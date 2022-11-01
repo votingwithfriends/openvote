@@ -30,5 +30,7 @@ export class Choice extends BaseEntity {
   @ManyToOne(() => Poll, (poll) => poll.choices)
   poll: Poll;
 
-  @OneToMany(() => Vote, (vote) => vote.choice) vote: Vote[];
+  @Field(() => [Vote])
+  @OneToMany(() => Vote, (vote) => vote.choice)
+  votes: Vote[];
 }

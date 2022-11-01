@@ -28,6 +28,7 @@ export class ChoiceResolver {
     }
   }
 
+  // Update a choice
   @Mutation(() => Choice)
   async updateChoice(@Arg("id") id: number, @Arg("title") title: string) {
     try {

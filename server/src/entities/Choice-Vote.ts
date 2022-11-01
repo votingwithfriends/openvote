@@ -1,4 +1,11 @@
-import { Entity, BaseEntity, PrimaryGeneratedColumn, ManyToOne } from "typeorm";
+import {
+  Entity,
+  BaseEntity,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  Column,
+  JoinColumn,
+} from "typeorm";
 import { ObjectType, Field, Int } from "type-graphql";
 import { User } from "./User";
 import { Choice } from "./Poll-Choice";
@@ -11,6 +18,21 @@ export class Vote extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => User, (user) => user.vote) user: User;
-  @ManyToOne(() => Choice, (choice) => choice.vote) choice: Choice;
+  @Field()
+  @Column()
+  value: number;
+
+  @Field()
+  @Column()
+  @JoinColumn({ name: "userId" })
+  userId: number;
+  @ManyToOne(() => User, (user) => user.votes)
+  user: User;
+
+  @Field()
+  @Column()
+  @JoinColumn({ name: "choiceId" })
+  choiceId: number;
+  @ManyToOne(() => Choice, (choice) => choice.votes)
+  choice: Choice;
 }
