@@ -24,7 +24,7 @@ export class Choice extends BaseEntity {
   title: string;
 
   @Field()
-  @Column()
+  @Column({ nullable: true })
   @JoinColumn({ name: "pollId" })
   pollId: number;
   @ManyToOne(() => Poll, (poll) => poll.choices)
