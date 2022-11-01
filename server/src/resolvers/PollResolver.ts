@@ -55,6 +55,16 @@ export class PollResolver {
     });
   }
 
+  // get poll with choices
+  @Query(() => Poll)
+  getPollAndChoices(@Arg("id") id: number) {
+    return AppDataSource.getRepository(Poll)
+      .createQueryBuilder("p")
+      .leftJoinAndSelect("p.choices", "c")
+      .where("p.id = :pollId", { pollId: id })
+      .getOne();
+  }
+
   //   Mutations
   // add poll
   @Mutation(() => Poll)

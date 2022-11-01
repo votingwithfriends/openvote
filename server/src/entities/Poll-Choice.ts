@@ -4,9 +4,12 @@ import {
   Column,
   PrimaryGeneratedColumn,
   ManyToOne,
+  OneToMany,
+  JoinColumn,
 } from "typeorm";
 import { ObjectType, Field, Int } from "type-graphql";
 import { Poll } from "./Poll";
+import { Vote } from "./Choice-Vote";
 
 // Define the poll-choice entity
 @ObjectType()
@@ -20,5 +23,14 @@ export class Choice extends BaseEntity {
   @Column()
   title: string;
 
-  @ManyToOne(() => Poll, (poll) => poll.choice) poll: Poll;
+  @Field()
+  @Column()
+  @JoinColumn({ name: "pollId" })
+  pollId: number;
+  @ManyToOne(() => Poll, (poll) => poll.choices)
+  poll: Poll;
+
+  @Field(() => [Vote])
+  @OneToMany(() => Vote, (vote) => vote.choice)
+  votes: Vote[];
 }

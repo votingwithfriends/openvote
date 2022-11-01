@@ -1,0 +1,1 @@
+DROP TABLE IF EXISTS choice, comment, poll, user, vote;

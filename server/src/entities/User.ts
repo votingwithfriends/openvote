@@ -8,6 +8,7 @@ import {
 import { ObjectType, Field, Int } from "type-graphql";
 import { Comment } from "./Comment";
 import { Poll } from "./Poll";
+import { Vote } from "./Choice-Vote";
 
 // Define the user entity
 @ObjectType()
@@ -33,4 +34,5 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Comment, (comment) => comment.user) comments: Comment[];
   @OneToMany(() => Poll, (poll) => poll.user) polls: Poll[];
+  @OneToMany(() => Vote, (vote) => vote.user) votes: Vote[];
 }
