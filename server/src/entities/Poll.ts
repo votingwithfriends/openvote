@@ -38,7 +38,8 @@ export class Poll extends BaseEntity {
   @JoinColumn({ name: "userId" })
   user: User;
 
-  @OneToMany(() => Comment, (comment) => comment.poll)
+  @Field(() => [Comment])
+  @OneToMany(() => Comment, (comment) => comment.poll, { nullable: true })
   comments: Comment[];
 
   @Field(() => [Choice])

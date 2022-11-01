@@ -10,7 +10,6 @@ import {
   Ctx,
   UseMiddleware,
 } from "type-graphql";
-import { Comment } from "../entities/Comment";
 import { Poll } from "../entities/Poll";
 import { Context } from "../types/Context";
 import { isAuth } from "../utility/isAuth";
@@ -35,23 +34,17 @@ export class PollResolver {
   // get all polls
   @Query(() => [Poll])
   polls() {
-    return Poll.find();
+    return Poll.find({
+      relations: ["comments", "choices"],
+    });
   }
 
   //   get poll by id
   @Query(() => Poll)
   poll(@Arg("id") id: number) {
     return Poll.findOne({
-      relations: ["comments.poll"],
+      relations: ["comments", "choices"],
       where: { id },
-    });
-  }
-
-  @Query(() => [Comment])
-  pollComments(@Arg("id") id: number) {
-    return AppDataSource.getRepository(Comment).find({
-      // relations: ["comments"],
-      where: { pollId: id },
     });
   }
 
