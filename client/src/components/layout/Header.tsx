@@ -1,12 +1,16 @@
 import { useState } from "react";
 import { Container } from "../Container";
 import { RiMenuLine, RiCloseLine } from "react-icons/ri";
-import { useMeQuery } from "../../generated/graphql";
+import { useLogoutMutation, useMeQuery } from "../../generated/graphql";
 import { Link } from "react-router-dom";
+import { setAccessToken } from "../../token";
 
 export const Header: React.FC = () => {
   // Get user currently logged in
   const { loading, data } = useMeQuery();
+
+  // Log user out
+  const [logout, { client }] = useLogoutMutation();
 
   // Mobile menu state
   const [mobileMenu, setMobileMenu] = useState<Boolean>(false);
@@ -22,9 +26,42 @@ export const Header: React.FC = () => {
           <Link to="/" className="font-bold">
             OpenVote
           </Link>
-          <div onClick={() => setMobileMenu(true)}>
+          <div className="md:hidden" onClick={() => setMobileMenu(true)}>
             <RiMenuLine fontSize={26} />
           </div>
+          {data && data.me ? (
+            <ul className="hidden md:flex flex-col">
+              <li>
+                <Link
+                  className="font-bold text-lg"
+                  to={`/profile/u/${data.me.id}`}
+                >
+                  {data?.me?.username}
+                </Link>
+              </li>
+              <li>
+                <p
+                  className="cursor-pointer"
+                  onClick={async () => {
+                    await logout();
+                    setAccessToken("");
+                    await client.resetStore();
+                  }}
+                >
+                  Logout
+                </p>
+              </li>
+            </ul>
+          ) : (
+            <ul className="hidden md:flex gap-x-10">
+              <li>
+                <Link to="/login">Login</Link>
+              </li>
+              <li>
+                <Link to="/signup">Sign Up</Link>
+              </li>
+            </ul>
+          )}
         </nav>
       </Container>
 
@@ -52,7 +89,15 @@ export const Header: React.FC = () => {
                   </Link>
                 </li>
                 <li>
-                  <p>Logout</p>
+                  <p
+                    onClick={async () => {
+                      await logout();
+                      setAccessToken("");
+                      await client.resetStore();
+                    }}
+                  >
+                    Logout
+                  </p>
                 </li>
               </ul>
             ) : (

@@ -7,6 +7,7 @@ import { Main } from "../components/layout/Main";
 import { Home } from "./Home";
 import { Login } from "./Login";
 import { Signup } from "./Signup";
+import { Profile } from "./Profile";
 
 export const Router: React.FC = () => {
   return (
@@ -18,6 +19,7 @@ export const Router: React.FC = () => {
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
+            <Route path="/profile/u/:userId" element={<Profile />} />
           </Routes>
         </Main>
         <Footer />
