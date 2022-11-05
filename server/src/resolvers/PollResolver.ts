@@ -7,12 +7,12 @@ import {
   //   ObjectType,
   Field,
   InputType,
-  Ctx,
-  UseMiddleware,
+  // Ctx,
+  // UseMiddleware,
 } from "type-graphql";
 import { Poll } from "../entities/Poll";
-import { Context } from "../types/Context";
-import { isAuth } from "../utility/isAuth";
+// import { Context } from "../types/Context";
+// import { isAuth } from "../utility/isAuth";
 
 @InputType()
 class UpdatePollInput {
@@ -61,19 +61,21 @@ export class PollResolver {
   //   Mutations
   // add poll
   @Mutation(() => Poll)
-  @UseMiddleware(isAuth)
+  // @UseMiddleware(isAuth)
   async addPoll(
     @Arg("is_open") is_open: boolean,
     @Arg("title") title: string,
+    @Arg("userId") userId: number
     // get token information
-    @Ctx() { payload }: Context
+    // @Ctx() { payload }: Context
   ) {
     try {
       //   create poll
       const poll = Poll.create({
         is_open,
         title,
-        userId: parseInt(payload!.userId),
+        userId,
+        // parseInt(payload!.userId),
       }).save();
       return poll;
     } catch (error) {

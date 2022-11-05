@@ -19,7 +19,9 @@ export type Scalars = {
 export type Choice = {
   __typename?: 'Choice';
   id: Scalars['Int'];
+  pollId: Scalars['Float'];
   title: Scalars['String'];
+  votes: Array<Vote>;
 };
 
 export type Comment = {
@@ -50,17 +52,23 @@ export type Mutation = {
   addComment: Comment;
   addFriend: Scalars['Boolean'];
   addPoll: Poll;
+  addVote: Vote;
+  deleteChoice: Choice;
   deleteComment: Comment;
   deletePoll: Poll;
+  deleteVote: Vote;
   login: LoginResponse;
   logout: Scalars['String'];
   register: User;
+  updateChoice: Choice;
   updateComment: Comment;
   updatePoll: Poll;
+  updateVote: Vote;
 };
 
 
 export type MutationAddChoiceArgs = {
+  pollId: Scalars['Float'];
   title: Scalars['String'];
 };
 
@@ -79,6 +87,19 @@ export type MutationAddFriendArgs = {
 export type MutationAddPollArgs = {
   is_open: Scalars['Boolean'];
   title: Scalars['String'];
+  userId: Scalars['Float'];
+};
+
+
+export type MutationAddVoteArgs = {
+  choiceId: Scalars['Float'];
+  userId: Scalars['Float'];
+  value: Scalars['Float'];
+};
+
+
+export type MutationDeleteChoiceArgs = {
+  id: Scalars['Float'];
 };
 
 
@@ -88,6 +109,11 @@ export type MutationDeleteCommentArgs = {
 
 
 export type MutationDeletePollArgs = {
+  id: Scalars['Float'];
+};
+
+
+export type MutationDeleteVoteArgs = {
   id: Scalars['Float'];
 };
 
@@ -105,6 +131,12 @@ export type MutationRegisterArgs = {
 };
 
 
+export type MutationUpdateChoiceArgs = {
+  id: Scalars['Float'];
+  title: Scalars['String'];
+};
+
+
 export type MutationUpdateCommentArgs = {
   data: UpdateCommentInput;
   id: Scalars['Float'];
@@ -116,8 +148,16 @@ export type MutationUpdatePollArgs = {
   id: Scalars['Float'];
 };
 
+
+export type MutationUpdateVoteArgs = {
+  id: Scalars['Float'];
+  value: Scalars['Float'];
+};
+
 export type Poll = {
   __typename?: 'Poll';
+  choices: Array<Choice>;
+  comments: Array<Comment>;
   id: Scalars['Int'];
   is_open: Scalars['Boolean'];
   title: Scalars['String'];
@@ -130,11 +170,14 @@ export type Query = {
   choices: Array<Choice>;
   comments: Array<Comment>;
   getFriendsBySourceId: Array<User>;
+  getPollAndChoices: Poll;
   me?: Maybe<User>;
   poll: Poll;
   polls: Array<Poll>;
   user: User;
   users: Array<User>;
+  vote: Vote;
+  votes: Array<Vote>;
 };
 
 
@@ -148,12 +191,22 @@ export type QueryGetFriendsBySourceIdArgs = {
 };
 
 
+export type QueryGetPollAndChoicesArgs = {
+  id: Scalars['Float'];
+};
+
+
 export type QueryPollArgs = {
   id: Scalars['Float'];
 };
 
 
 export type QueryUserArgs = {
+  id: Scalars['Float'];
+};
+
+
+export type QueryVoteArgs = {
   id: Scalars['Float'];
 };
 
@@ -172,6 +225,23 @@ export type User = {
   id: Scalars['Int'];
   username: Scalars['String'];
 };
+
+export type Vote = {
+  __typename?: 'Vote';
+  choiceId: Scalars['Float'];
+  id: Scalars['Int'];
+  userId: Scalars['Float'];
+  value: Scalars['Float'];
+};
+
+export type AddPollMutationVariables = Exact<{
+  title: Scalars['String'];
+  is_open: Scalars['Boolean'];
+  userId: Scalars['Float'];
+}>;
+
+
+export type AddPollMutation = { __typename?: 'Mutation', addPoll: { __typename?: 'Poll', title: string, is_open: boolean, userId: number } };
 
 export type LoginMutationVariables = Exact<{
   password: Scalars['String'];
@@ -208,6 +278,43 @@ export type UserQueryVariables = Exact<{
 export type UserQuery = { __typename?: 'Query', user: { __typename?: 'User', id: number, username: string, email: string } };
 
 
+export const AddPollDocument = gql`
+    mutation addPoll($title: String!, $is_open: Boolean!, $userId: Float!) {
+  addPoll(title: $title, is_open: $is_open, userId: $userId) {
+    title
+    is_open
+    userId
+  }
+}
+    `;
+export type AddPollMutationFn = Apollo.MutationFunction<AddPollMutation, AddPollMutationVariables>;
+
+/**
+ * __useAddPollMutation__
+ *
+ * To run a mutation, you first call `useAddPollMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddPollMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addPollMutation, { data, loading, error }] = useAddPollMutation({
+ *   variables: {
+ *      title: // value for 'title'
+ *      is_open: // value for 'is_open'
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useAddPollMutation(baseOptions?: Apollo.MutationHookOptions<AddPollMutation, AddPollMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AddPollMutation, AddPollMutationVariables>(AddPollDocument, options);
+      }
+export type AddPollMutationHookResult = ReturnType<typeof useAddPollMutation>;
+export type AddPollMutationResult = Apollo.MutationResult<AddPollMutation>;
+export type AddPollMutationOptions = Apollo.BaseMutationOptions<AddPollMutation, AddPollMutationVariables>;
 export const LoginDocument = gql`
     mutation Login($password: String!, $email: String!) {
   login(password: $password, email: $email) {

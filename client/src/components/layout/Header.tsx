@@ -4,6 +4,7 @@ import { RiMenuLine, RiCloseLine } from "react-icons/ri";
 import { useLogoutMutation, useMeQuery } from "../../generated/graphql";
 import { Link } from "react-router-dom";
 import { setAccessToken } from "../../token";
+import React from "react";
 
 export const Header: React.FC = () => {
   // Get user currently logged in

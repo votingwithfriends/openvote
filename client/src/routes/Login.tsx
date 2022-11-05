@@ -2,6 +2,8 @@ import { useState } from "react";
 import { setAccessToken } from "../token";
 import { Link, useNavigate } from "react-router-dom";
 import { MeDocument, MeQuery, useLoginMutation } from "../generated/graphql";
+import React from "react";
+
 export const Login: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
