@@ -3,5 +3,6 @@ mutation addPoll($title: String!, $is_open: Boolean!, $userId: Float!) {
     title
     is_open
     userId
+    id
   }
 }

@@ -241,7 +241,7 @@ export type AddPollMutationVariables = Exact<{
 }>;
 
 
-export type AddPollMutation = { __typename?: 'Mutation', addPoll: { __typename?: 'Poll', title: string, is_open: boolean, userId: number } };
+export type AddPollMutation = { __typename?: 'Mutation', addPoll: { __typename?: 'Poll', title: string, is_open: boolean, userId: number, id: number } };
 
 export type LoginMutationVariables = Exact<{
   password: Scalars['String'];
@@ -284,6 +284,7 @@ export const AddPollDocument = gql`
     title
     is_open
     userId
+    id
   }
 }
     `;
