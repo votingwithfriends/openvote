@@ -1,23 +1,36 @@
 import React, { useState } from "react";
 import { useParams, useLocation } from "react-router-dom";
-import { useUserQuery, useAddPollMutation } from "../generated/graphql";
+import { useUserQuery, useAddChoiceMutation } from "../generated/graphql";
 
 export const CreateChoice = () => {
   // get poll data from create poll
   const location = useLocation();
-  const title = location.state.data.addPoll.title;
+  const title = location.state.data.title;
+  console.log(location.state.data);
   const [choices, setChoices] = useState<Array<string>>([]);
   const [choice, setChoice] = useState("");
+  const [addChoice] = useAddChoiceMutation();
 
-  const handleChange = (e: any) => {
+  const handleChange = async (e: any) => {
     e.preventDefault();
     const { value } = e.target;
     setChoice(value);
     console.log(value);
   };
 
-  const handleAddChoice = (e: any) => {
+  const handleAddChoice = async (e: any) => {
     e.preventDefault();
+    try {
+      // add choice to poll
+      const response = await addChoice({
+        variables: {
+          title: choice,
+          pollId: location.state.data.id,
+        },
+      });
+    } catch (error) {
+      console.log(error);
+    }
     // add current choice to choices array
     setChoices((prevChoices) => [...prevChoices, choice]);
     console.log(choices);

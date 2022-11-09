@@ -1,0 +1,6 @@
+mutation addChoice($title: String!, $pollId: Float!) {
+  addChoice(title: $title, pollId: $pollId) {
+    id
+    title
+  }
+}

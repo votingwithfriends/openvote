@@ -27,7 +27,7 @@ export class Choice extends BaseEntity {
   @Column({ nullable: true })
   @JoinColumn({ name: "pollId" })
   pollId: number;
-  @ManyToOne(() => Poll, (poll) => poll.choices)
+  @ManyToOne(() => Poll, (poll) => poll.choices, { onDelete: "CASCADE" })
   poll: Poll;
 
   @Field(() => [Vote])
