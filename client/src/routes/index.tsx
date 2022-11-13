@@ -11,6 +11,7 @@ import { Signup } from "./Signup";
 import { Profile } from "./Profile";
 import { CreatePoll } from "./CreatePoll";
 import { CreateChoice } from "./CreateChoices";
+import { Poll } from "./Poll";
 
 export const Router: React.FC = () => {
   return (
@@ -24,7 +25,11 @@ export const Router: React.FC = () => {
             <Route path="/signup" element={<Signup />} />
             <Route path="/profile/u/:userId" element={<Profile />} />
             <Route path="/poll/cp/:userId" element={<CreatePoll />} />
-            <Route path="/poll/choices/:userId" element={<CreateChoice />} />
+            <Route
+              path="/poll/choices/:pollId/:userId"
+              element={<CreateChoice />}
+            />
+            <Route path="/poll/vote/:pollId/:userId" element={<Poll />} />
           </Routes>
         </Main>
         <Footer />

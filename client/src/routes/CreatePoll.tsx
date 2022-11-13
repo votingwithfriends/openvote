@@ -31,10 +31,9 @@ export const CreatePoll: React.FC = () => {
           userId: parseInt(userId!),
         },
       });
+
       //   navigate to choices page and send poll data
-      navigator(`/poll/choices/${userId}`, {
-        state: { data: response.data?.addPoll },
-      });
+      navigator(`/poll/choices/${response.data?.addPoll.id}/${userId}`);
     } catch (error) {
       console.log(error);
     }

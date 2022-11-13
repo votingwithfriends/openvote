@@ -269,6 +269,13 @@ export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'User', id: number, username: string, email: string } | null };
 
+export type PollQueryVariables = Exact<{
+  id: Scalars['Float'];
+}>;
+
+
+export type PollQuery = { __typename?: 'Query', poll: { __typename?: 'Poll', id: number, is_open: boolean, title: string, userId: number, comments: Array<{ __typename?: 'Comment', comment_text: string, id: number, userId: number }>, choices: Array<{ __typename?: 'Choice', title: string, id: number }> } };
+
 export type RegisterMutationVariables = Exact<{
   password: Scalars['String'];
   email: Scalars['String'];
@@ -464,6 +471,53 @@ export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery
 export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
+export const PollDocument = gql`
+    query poll($id: Float!) {
+  poll(id: $id) {
+    id
+    is_open
+    title
+    userId
+    comments {
+      comment_text
+      id
+      userId
+    }
+    choices {
+      title
+      id
+    }
+  }
+}
+    `;
+
+/**
+ * __usePollQuery__
+ *
+ * To run a query within a React component, call `usePollQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePollQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePollQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function usePollQuery(baseOptions: Apollo.QueryHookOptions<PollQuery, PollQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<PollQuery, PollQueryVariables>(PollDocument, options);
+      }
+export function usePollLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PollQuery, PollQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<PollQuery, PollQueryVariables>(PollDocument, options);
+        }
+export type PollQueryHookResult = ReturnType<typeof usePollQuery>;
+export type PollLazyQueryHookResult = ReturnType<typeof usePollLazyQuery>;
+export type PollQueryResult = Apollo.QueryResult<PollQuery, PollQueryVariables>;
 export const RegisterDocument = gql`
     mutation Register($password: String!, $email: String!, $username: String!) {
   register(password: $password, email: $email, username: $username) {
