@@ -1,24 +1,26 @@
 import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import { App } from "./App";
 import {
   ApolloClient,
-  ApolloProvider,
-  HttpLink,
   InMemoryCache,
+  ApolloProvider,
   ApolloLink,
   Observable,
+  HttpLink,
 } from "@apollo/client";
+import { onError } from "@apollo/client/link/error";
 import { getAccessToken, setAccessToken } from "./token";
 import { TokenRefreshLink } from "apollo-link-token-refresh";
-import ReactDOM from "react-dom/client";
 import jwtDecode, { JwtPayload } from "jwt-decode";
-import { App } from "./App";
-import "./index.css";
+
+const cache = new InMemoryCache();
 
 const requestLink = new ApolloLink(
   (operation, forward) =>
     new Observable((observer) => {
       let handle: any;
-      // Send access token in response header
       Promise.resolve(operation)
         .then((operation) => {
           const accessToken = getAccessToken();
@@ -50,9 +52,7 @@ const client = new ApolloClient({
       accessTokenField: "accessToken",
       isTokenValidOrUndefined: () => {
         const token = getAccessToken();
-        if (!token) {
-          return true;
-        }
+        if (!token) return true;
         try {
           const { exp } = jwtDecode<JwtPayload>(token);
           if (Date.now() >= exp! * 1000) {
@@ -73,9 +73,13 @@ const client = new ApolloClient({
       handleFetch: (accessToken) => {
         setAccessToken(accessToken);
       },
-      handleError: (err) => {
-        console.warn("Refresh token has expired. Try to re-login");
+      handleError: () => {
+        console.error("Refresh token is invalid, try login in again");
       },
+    }),
+    onError(({ graphQLErrors, networkError }) => {
+      console.log(graphQLErrors);
+      console.log(networkError);
     }),
     requestLink,
     new HttpLink({
@@ -83,7 +87,7 @@ const client = new ApolloClient({
       credentials: "include",
     }),
   ]),
-  cache: new InMemoryCache(),
+  cache,
 });
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(

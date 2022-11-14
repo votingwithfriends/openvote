@@ -7,7 +7,7 @@ import { setAccessToken } from "../../token";
 
 export const Header: React.FC = () => {
   // Get user currently logged in
-  const { loading, data } = useMeQuery();
+  const { data, loading } = useMeQuery();
 
   // Log user out
   const [logout, { client }] = useLogoutMutation();
@@ -36,7 +36,7 @@ export const Header: React.FC = () => {
                   className="font-bold text-lg"
                   to={`/profile/u/${data.me.id}`}
                 >
-                  {data?.me?.username}
+                  {data.me.username}
                 </Link>
               </li>
               <li>
@@ -85,7 +85,7 @@ export const Header: React.FC = () => {
               <ul className="flex flex-col gap-y-6 font-bold">
                 <li>
                   <Link className="text-3xl" to="/">
-                    {data.me?.username}
+                    {data.me.username}
                   </Link>
                 </li>
                 <li>

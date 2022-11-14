@@ -1,22 +1,22 @@
 import "reflect-metadata";
 import "dotenv/config";
-import { AppDataSource } from "./db/connection";
 import express from "express";
 import { ApolloServer } from "apollo-server-express";
-import { buildSchema } from "type-graphql";
+import { AppDataSource } from "./db/connection";
 import path from "path";
+import { buildSchema } from "type-graphql";
+import cookieParser from "cookie-parser";
 import { verify } from "jsonwebtoken";
 import { User } from "./entities/User";
-import { sendRefreshToken } from "./utility/sendRefreshToken";
-import { createAccessToken, createRefreshToken } from "./auth";
-import cookieParser from "cookie-parser";
+import {
+  createAccessToken,
+  createRefreshToken,
+  sendRefreshToken,
+} from "./auth";
 import cors from "cors";
 
-// Load environmental variables
-const PORT = process.env.SERVER_PORT;
-
 (async () => {
-  // Create Express application
+  const PORT = 3001;
   const app = express();
   app.use(
     cors({
@@ -26,9 +26,15 @@ const PORT = process.env.SERVER_PORT;
   );
   app.use(cookieParser());
 
-  // Unique route to request a new refresh token
+  try {
+    await AppDataSource.initialize();
+  } catch (error) {
+    throw new Error(error);
+  }
+
+  // Handle refreshing token
   app.post("/refresh_token", async (req, res) => {
-    const token = req.cookies.vwfOV;
+    const token = req.cookies.vwf_ov;
     if (!token) {
       return res.send({ ok: false, accessToken: "" });
     }
@@ -37,46 +43,28 @@ const PORT = process.env.SERVER_PORT;
       payload = verify(token, process.env.REFRESH_TOKEN_SECRET!);
     } catch (error) {
       console.log(error);
-      return res.send({ ok: false, accessToken: "" });
+      res.send({ ok: false, accessToken: "" });
     }
-
     const user = await User.findOne({ where: { id: payload.userId } });
     if (!user) {
-      return res.send({ ok: false, accessToken: "" });
+      res.send({ ok: false, accessToken: "" });
     }
-
-    if (user.tokenVersion !== payload.tokenVersion) {
-      return res.send({ ok: false, accessToken: "" });
-    }
-
-    sendRefreshToken(res, createRefreshToken(user));
-    return res.send({ ok: true, accessToken: createAccessToken(user) });
+    sendRefreshToken(res, createRefreshToken(user!));
+    return res.send({ ok: true, accessToken: createAccessToken(user!) });
   });
 
-  // Connect to database
-  try {
-    await AppDataSource.initialize();
-    console.log("Connected to MySQL Database");
-  } catch (error) {
-    console.log("Error with database connection");
-    throw new Error(error);
-  }
-
-  // Create Apollo server
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [path.join(__dirname, "./resolvers/**/*.ts")],
+      resolvers: [path.join(__dirname, "./resolvers/*.ts")],
     }),
     context: ({ req, res }) => ({ req, res }),
   });
 
-  // Start Apollo server
   await apolloServer.start();
   apolloServer.applyMiddleware({ app, cors: false });
 
-  // Start Express server
   app.listen(PORT, () => {
-    console.log(`Server is running: http://localhost:${PORT}`);
-    console.log(`GraphQL server running on: http://localhost:${PORT}/graphql`);
+    console.log(`Server running on http://localhost:${PORT}`);
+    console.log(`GraphQL playground: http://localhost:${PORT}/graphql`);
   });
 })();

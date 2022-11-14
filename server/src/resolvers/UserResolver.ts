@@ -10,9 +10,8 @@ import {
 import { User } from "../entities/User";
 import { hash, compare } from "bcrypt";
 import { Context } from "../types/Context";
-import { sendRefreshToken } from "../utility/sendRefreshToken";
 import { verify } from "jsonwebtoken";
-import { createAccessToken, createRefreshToken } from "../auth";
+import { createAccessToken, createRefreshToken, sendRefreshToken } from "../auth";
 
 @ObjectType()
 class LoginResponse {

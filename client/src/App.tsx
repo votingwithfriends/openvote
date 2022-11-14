@@ -4,8 +4,6 @@ import { Router } from "./routes";
 
 export const App: React.FC = () => {
   const [loading, setLoading] = useState(true);
-
-  // Attempt to get a refresh token
   useEffect(() => {
     fetch("http://localhost:3001/refresh_token", {
       method: "POST",
@@ -18,11 +16,8 @@ export const App: React.FC = () => {
   }, []);
 
   if (loading) {
-    return (
-      <div>
-        <p>loading</p>
-      </div>
-    );
+    return <div>loading...</div>;
   }
+
   return <Router />;
 };

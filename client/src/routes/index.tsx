@@ -12,7 +12,7 @@ import { Profile } from "./Profile";
 export const Router: React.FC = () => {
   return (
     <BrowserRouter>
-      <div className="font-google-fonts h-full grid grid-rows-[auto_1fr_auto]">
+      <div className="font-google-fonts h-full bg-neutral-50 grid grid-rows-[auto_1fr_auto]">
         <Header />
         <Main>
           <Routes>
