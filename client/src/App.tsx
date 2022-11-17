@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { setAccessToken } from "./token";
 import { Router } from "./routes";
+import React from "react";
 
 export const App: React.FC = () => {
   const [loading, setLoading] = useState(true);

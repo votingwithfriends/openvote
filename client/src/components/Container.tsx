@@ -1,3 +1,5 @@
+import React from "react";
+
 interface Props {
   padding?: string;
   children: JSX.Element | JSX.Element[];

@@ -1,0 +1,17 @@
+query poll($id: Float!) {
+  poll(id: $id) {
+    id
+    is_open
+    title
+    userId
+    comments {
+      comment_text
+      id
+      userId
+    }
+    choices {
+      title
+      id
+    }
+  }
+}

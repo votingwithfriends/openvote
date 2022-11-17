@@ -1,0 +1,8 @@
+mutation addPoll($title: String!, $is_open: Boolean!, $userId: Float!) {
+  addPoll(title: $title, is_open: $is_open, userId: $userId) {
+    title
+    is_open
+    userId
+    id
+  }
+}
