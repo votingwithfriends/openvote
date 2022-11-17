@@ -42,17 +42,24 @@ export const CreatePoll: React.FC = () => {
 
   return (
     <section>
-      <p className="font-bold text-3xl">Create a Poll {data?.user.username}</p>
-      <div>
-        <form onSubmit={handleSubmit}>
-          <label>Poll Title</label>
+      <div className="flex justify-center">
+        <p className="font-bold text-3xl  ">
+          Name your poll {data?.user.username}
+        </p>
+      </div>
+      <div className="flex justify-center">
+        <form
+          className="bg-white shadow-lg rounded px-8 pt-6 pb-8 mb-4 md:w-1/2"
+          onSubmit={handleSubmit}
+        >
+          <label className="font-bold">Poll Title: </label>
           <input
             type="text"
             name="title"
             value={title}
             onChange={handleChange}
           />
-          <button>Submit</button>
+          <button className="bg-blue-700 p-2 text-white mt-2">Submit</button>
         </form>
       </div>
     </section>

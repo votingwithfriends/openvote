@@ -1,14 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import {
-  useUserQuery,
-  usePollQuery,
-  useAddChoiceMutation,
-} from "../generated/graphql";
+import { useUserQuery, usePollQuery } from "../generated/graphql";
 
 export const Poll = () => {
   const navigator = useNavigate();
-  const { pollId, userId } = useParams();
+  const { pollId } = useParams();
   const { data, loading } = usePollQuery({
     variables: {
       id: parseInt(pollId!),
@@ -22,24 +18,44 @@ export const Poll = () => {
   // console.log(userData);
   const [title, setTitle] = useState("");
   const [username, setUsername] = useState("");
-  const [choices, setChoices] = useState<Array<string>>([]);
+  const [choices, setChoices] = useState<Array<any>>([]);
 
   useEffect(() => {
-    setChoices(data?.poll.choices.map((choice) => choice.title) || []);
+    console.log(data?.poll.choices.map((choice) => choice));
+    setChoices(data?.poll.choices.map((choice) => choice) || []);
     setTitle(data?.poll.title || "");
     setUsername(userData?.user.username || "");
-  }, [data, userData]);
+  }, [data]);
+
+  if (loading || userLoading) {
+    return <div>Loading...</div>;
+  }
+
   return (
-    <div>
-      <p>
-        {title} Poll by {username}
-      </p>
-      <ul>
-        {choices.map((choice) => (
-          <li key={choice}>{choice}</li>
-        ))}
-      </ul>
-      <button className="bg-blue-700 p-2 text-white">Vote</button>
-    </div>
+    <section>
+      <div className="flex justify-center">
+        <p className="font-bold text-3xl  ">
+          {title} poll by {username}
+        </p>
+      </div>
+      <div className="flex justify-center">
+        <form className="bg-white shadow-lg rounded px-8 pt-6 pb-8 mb-4 md:w-1/2">
+          <ul className="">
+            {choices?.map((choice) => (
+              <div className="flex justify-between m-1">
+                <li key={choice.id}>{choice.title}</li>
+                <input
+                  type="text"
+                  name="vote"
+                  placeholder="vote"
+                  className="w-1/5"
+                />
+              </div>
+            ))}
+          </ul>
+          <button className="bg-blue-700 p-2 text-white">Vote</button>
+        </form>
+      </div>
+    </section>
   );
 };

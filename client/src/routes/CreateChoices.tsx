@@ -4,7 +4,9 @@ import {
   useUserQuery,
   usePollQuery,
   useAddChoiceMutation,
+  useDeleteChoiceMutation,
 } from "../generated/graphql";
+import { TiDelete } from "react-icons/ti";
 
 export const CreateChoice: React.FC = () => {
   // get poll data from create poll
@@ -23,12 +25,13 @@ export const CreateChoice: React.FC = () => {
   // console.log(userData);
   const [title, setTitle] = useState("");
   const [username, setUsername] = useState("");
-  const [choices, setChoices] = useState<Array<string>>([]);
+  const [choices, setChoices] = useState<Array<any>>([]);
   const [choice, setChoice] = useState("");
   const [addChoice] = useAddChoiceMutation();
+  const [deleteChoice] = useDeleteChoiceMutation();
 
   useEffect(() => {
-    setChoices(data?.poll.choices.map((choice) => choice.title) || []);
+    setChoices(data?.poll.choices.map((choice) => choice) || []);
     setTitle(data?.poll.title || "");
     setUsername(userData?.user.username || "");
   }, [data, userData]);
@@ -37,7 +40,7 @@ export const CreateChoice: React.FC = () => {
     e.preventDefault();
     const { value } = e.target;
     setChoice(value);
-    console.log(value);
+    // console.log(value);
   };
 
   const handleAddChoice = async (e: any) => {
@@ -50,31 +53,49 @@ export const CreateChoice: React.FC = () => {
           pollId: parseInt(pollId!),
         },
       });
+      console.log(response);
+      setChoices((prevChoices) => [...prevChoices, response.data?.addChoice]);
     } catch (error) {
       console.log(error);
     }
     // add current choice to choices array
-    setChoices((prevChoices) => [...prevChoices, choice]);
     console.log(choices);
     setChoice("");
   };
 
+  const handleDelete = async (e: any) => {
+    e.preventDefault();
+    console.log(e.target.id);
+    try {
+      const response = await deleteChoice({
+        variables: {
+          id: parseInt(e.target.id),
+        },
+      });
+    } catch (error) {
+      console.log(error);
+    }
+    // setChoices(choices.filter((choice, id) => id !== choice.id));
+    window.location.reload();
+  };
+
   const handleFinishPoll = async (e: any) => {
     e.preventDefault();
-    console.log(pollId, userId);
     // navigate to finished poll page
     navigator(`/poll/vote/${pollId}/${userId}`);
   };
   return (
     <section>
-      <p className="font-bold text-3xl">
-        Enter Choices for {title} Poll by {username}
-      </p>
-      <div>
-        <form>
-          <label>Choice: </label>
+      <div className="flex justify-center">
+        <p className="font-bold text-3xl">
+          Enter choices for {title} poll by {username}
+        </p>
+      </div>
+      <div className="flex justify-center">
+        <form className="bg-white shadow-lg rounded px-8 pt-6 pb-8 mb-4 md:w-1/2">
+          <label className="font-bold">Choice: </label>
           <input
-            className="mr-3"
+            className="w-full"
             type="text"
             name="title"
             value={choice}
@@ -93,11 +114,23 @@ export const CreateChoice: React.FC = () => {
             Finish Poll
           </button>
         </form>
-        <div>
+        <div></div>
+      </div>
+      <div className="flex justify-center">
+        <div className="bg-white shadow-lg rounded px-8 pt-6 pb-8 mb-4 md:w-1/2">
           <h2 className="font-bold text-xl">Your Choices for {title} Poll</h2>
-          <ul>
+          <ul className="">
             {choices?.map((choice) => (
-              <li key={choice}>{choice}</li>
+              <li key={choice.id} className=" flex justify-between">
+                {choice.title}{" "}
+                <div className="px-4" onClick={handleDelete}>
+                  <TiDelete
+                    id={choice.id}
+                    className="inline text-2xl justify-end cursor-pointer"
+                    title={`delete ${choice}`}
+                  />
+                </div>
+              </li>
             ))}
           </ul>
         </div>

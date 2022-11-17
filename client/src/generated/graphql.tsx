@@ -251,6 +251,13 @@ export type AddPollMutationVariables = Exact<{
 
 export type AddPollMutation = { __typename?: 'Mutation', addPoll: { __typename?: 'Poll', title: string, is_open: boolean, userId: number, id: number } };
 
+export type DeleteChoiceMutationVariables = Exact<{
+  id: Scalars['Float'];
+}>;
+
+
+export type DeleteChoiceMutation = { __typename?: 'Mutation', deleteChoice: { __typename?: 'Choice', title: string } };
+
 export type LoginMutationVariables = Exact<{
   password: Scalars['String'];
   email: Scalars['String'];
@@ -366,6 +373,39 @@ export function useAddPollMutation(baseOptions?: Apollo.MutationHookOptions<AddP
 export type AddPollMutationHookResult = ReturnType<typeof useAddPollMutation>;
 export type AddPollMutationResult = Apollo.MutationResult<AddPollMutation>;
 export type AddPollMutationOptions = Apollo.BaseMutationOptions<AddPollMutation, AddPollMutationVariables>;
+export const DeleteChoiceDocument = gql`
+    mutation deleteChoice($id: Float!) {
+  deleteChoice(id: $id) {
+    title
+  }
+}
+    `;
+export type DeleteChoiceMutationFn = Apollo.MutationFunction<DeleteChoiceMutation, DeleteChoiceMutationVariables>;
+
+/**
+ * __useDeleteChoiceMutation__
+ *
+ * To run a mutation, you first call `useDeleteChoiceMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteChoiceMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteChoiceMutation, { data, loading, error }] = useDeleteChoiceMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteChoiceMutation(baseOptions?: Apollo.MutationHookOptions<DeleteChoiceMutation, DeleteChoiceMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteChoiceMutation, DeleteChoiceMutationVariables>(DeleteChoiceDocument, options);
+      }
+export type DeleteChoiceMutationHookResult = ReturnType<typeof useDeleteChoiceMutation>;
+export type DeleteChoiceMutationResult = Apollo.MutationResult<DeleteChoiceMutation>;
+export type DeleteChoiceMutationOptions = Apollo.BaseMutationOptions<DeleteChoiceMutation, DeleteChoiceMutationVariables>;
 export const LoginDocument = gql`
     mutation Login($password: String!, $email: String!) {
   login(password: $password, email: $email) {
