@@ -34,12 +34,12 @@ export const Poll = () => {
   return (
     <section>
       <div className="flex justify-center">
-        <p className="font-bold text-3xl  ">
+        <p className="font-bold text-3xl mb-4 ">
           {title} poll by {username}
         </p>
       </div>
       <div className="flex justify-center">
-        <form className="bg-white shadow-lg rounded px-8 pt-6 pb-8 mb-4 md:w-1/2">
+        <form className="bg-white w-full md:w-auto p-8 rounded-lg border-2 border-blue-500">
           <ul className="">
             {choices?.map((choice) => (
               <div className="flex justify-between m-1">
@@ -53,7 +53,9 @@ export const Poll = () => {
               </div>
             ))}
           </ul>
-          <button className="bg-blue-700 p-2 text-white">Vote</button>
+          <div className="flex justify-center mt-3">
+            <button className="bg-blue-700 p-2 px-6 text-white">Vote</button>
+          </div>
         </form>
       </div>
     </section>

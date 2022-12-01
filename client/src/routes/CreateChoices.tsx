@@ -87,12 +87,12 @@ export const CreateChoice: React.FC = () => {
   return (
     <section>
       <div className="flex justify-center">
-        <p className="font-bold text-3xl">
+        <p className="font-bold text-3xl mb-4">
           Enter choices for {title} poll by {username}
         </p>
       </div>
       <div className="flex justify-center">
-        <form className="bg-white shadow-lg rounded px-8 pt-6 pb-8 mb-4 md:w-1/2">
+        <form className="bg-white w-full md:w-auto p-8 rounded-lg border-2 border-blue-500">
           <label className="font-bold">Choice: </label>
           <input
             className="w-full"
@@ -101,24 +101,27 @@ export const CreateChoice: React.FC = () => {
             value={choice}
             onChange={handleChange}
           />
-          <button
-            onClick={handleAddChoice}
-            className="bg-blue-700 p-2 text-white my-3 mr-3"
-          >
-            Add Another Choice
-          </button>
-          <button
-            onClick={handleFinishPoll}
-            className="bg-blue-700 p-2 text-white"
-          >
-            Finish Poll
-          </button>
+          <div className="flex justify-center mt-3">
+            <button
+              onClick={handleAddChoice}
+              className="bg-blue-700 p-2 text-white mr-3"
+            >
+              Add Another Choice
+            </button>
+            <button
+              onClick={handleFinishPoll}
+              className="bg-blue-700 p-2 text-white"
+            >
+              Finish Poll
+            </button>
+          </div>
         </form>
-        <div></div>
       </div>
       <div className="flex justify-center">
-        <div className="bg-white shadow-lg rounded px-8 pt-6 pb-8 mb-4 md:w-1/2">
-          <h2 className="font-bold text-xl">Your Choices for {title} Poll</h2>
+        <div className="bg-white shadow-lg rounded px-8 pt-6 pb-8 my-4  w-full md:w-auto p-8 border-2 border-blue-500">
+          <h2 className="font-bold text-xl text-center">
+            Your choices for {title} poll
+          </h2>
           <ul className="">
             {choices?.map((choice) => (
               <li key={choice.id} className=" flex justify-between">
