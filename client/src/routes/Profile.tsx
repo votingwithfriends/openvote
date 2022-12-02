@@ -1,4 +1,4 @@
-import React from "react";
+import { Layout } from "../components/layout";
 import { useParams } from "react-router-dom";
 import { useUserQuery } from "../generated/graphql";
 
@@ -11,9 +11,11 @@ export const Profile: React.FC = () => {
   });
 
   return (
-    <section>
-      <p className="font-bold text-3xl">Profile</p>
-      <p>{data?.user.username}</p>
-    </section>
+    <Layout>
+      <section>
+        <p className="font-bold text-3xl">Profile</p>
+        <p>{data?.user.username}</p>
+      </section>
+    </Layout>
   );
 };

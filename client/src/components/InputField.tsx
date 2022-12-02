@@ -11,6 +11,7 @@ interface Props {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur?: React.FocusEventHandler<HTMLInputElement>;
   children?: JSX.Element;
+  autofocus?: boolean;
 }
 
 export const InputField: React.FC<Props> = ({
@@ -23,11 +24,12 @@ export const InputField: React.FC<Props> = ({
   onChange,
   onBlur,
   children,
+  autofocus,
 }) => {
   const [inputType, setInputType] = useState(type);
 
   return (
-    <div className="flex flex-col gap-y-1">
+    <div>
       <label htmlFor={id}>
         <span>{labelText}</span>
       </label>
@@ -41,6 +43,7 @@ export const InputField: React.FC<Props> = ({
           value={value}
           onChange={onChange}
           onBlur={onBlur}
+          autoFocus={autofocus}
         />
 
         {type === "password" && (

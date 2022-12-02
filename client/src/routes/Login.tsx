@@ -16,7 +16,7 @@ export const Login: React.FC = () => {
   return (
     <div className="flex bg-slate-100 h-full flex-col justify-center items-center">
       <Link to={"/"}>
-        <img className="h-14" src={logo} alt="openvote logo link" />
+        <img className="h-12" src={logo} alt="openvote logo link" />
       </Link>
       <Form
         title="Login"
@@ -60,6 +60,7 @@ export const Login: React.FC = () => {
           type="email"
           value={email}
           required
+          autofocus
           onChange={(e) => setEmail(e.target.value)}
         />
         <InputField

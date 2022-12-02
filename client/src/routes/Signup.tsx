@@ -33,7 +33,7 @@ export const Signup: React.FC = () => {
   return (
     <div className="flex bg-slate-100 h-full flex-col justify-center items-center">
       <Link to={"/"}>
-        <img className="h-14" src={logo} alt="openvote logo link" />
+        <img className="h-12" src={logo} alt="openvote logo link" />
       </Link>
       <Form
         title="Create new account"
@@ -67,22 +67,24 @@ export const Signup: React.FC = () => {
           if (loginRes && loginRes.data) {
             setAccessToken(loginRes.data.login.accessToken);
           }
-          navigator("/");
+          navigator(`/profile/u/${loginRes.data?.login.user.id}`);
         }}
       >
         <InputField
           labelText="Username"
           type="text"
           value={username}
+          autofocus
           onChange={(e) => setUsername(e.target.value)}
         />
         <InputField
           labelText="Email"
           type="email"
           value={email}
+          required
           onChange={(e) => setEmail(e.target.value)}
           onBlur={async () => {
-            const { data, loading } = await checkEmail({
+            const { data } = await checkEmail({
               variables: {
                 email,
               },
@@ -102,17 +104,20 @@ export const Signup: React.FC = () => {
           labelText="Password"
           type="password"
           value={password}
+          required
           onChange={(e) => setPassword(e.target.value)}
         />
         <InputField
           labelText="Confirm password"
           type="password"
           value={confirmPw}
+          required
           onChange={(e) => setConfirmPw(e.target.value)}
-        />
-        <p className="text-rose-500 h-5">
-          {passwordsMatch ? "" : "Passwords do not match"}
-        </p>
+        >
+          <p className="text-rose-500 text-sm h-5">
+            {passwordsMatch ? "" : "Passwords do not match"}
+          </p>
+        </InputField>
         <button
           disabled={!passwordsMatch || confirmPw === "" || dupEmailError}
           className={`${
