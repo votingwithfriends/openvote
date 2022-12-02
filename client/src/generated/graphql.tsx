@@ -171,6 +171,7 @@ export type Query = {
   comments: Array<Comment>;
   getFriendsBySourceId: Array<User>;
   getPollAndChoices: Poll;
+  isEmailUsed: Scalars['Boolean'];
   me?: Maybe<User>;
   poll: Poll;
   polls: Array<Poll>;
@@ -193,6 +194,11 @@ export type QueryGetFriendsBySourceIdArgs = {
 
 export type QueryGetPollAndChoicesArgs = {
   id: Scalars['Float'];
+};
+
+
+export type QueryIsEmailUsedArgs = {
+  email: Scalars['String'];
 };
 
 
@@ -257,6 +263,13 @@ export type DeleteChoiceMutationVariables = Exact<{
 
 
 export type DeleteChoiceMutation = { __typename?: 'Mutation', deleteChoice: { __typename?: 'Choice', title: string } };
+
+export type IsEmailUsedQueryVariables = Exact<{
+  email: Scalars['String'];
+}>;
+
+
+export type IsEmailUsedQuery = { __typename?: 'Query', isEmailUsed: boolean };
 
 export type LoginMutationVariables = Exact<{
   password: Scalars['String'];
@@ -406,6 +419,39 @@ export function useDeleteChoiceMutation(baseOptions?: Apollo.MutationHookOptions
 export type DeleteChoiceMutationHookResult = ReturnType<typeof useDeleteChoiceMutation>;
 export type DeleteChoiceMutationResult = Apollo.MutationResult<DeleteChoiceMutation>;
 export type DeleteChoiceMutationOptions = Apollo.BaseMutationOptions<DeleteChoiceMutation, DeleteChoiceMutationVariables>;
+export const IsEmailUsedDocument = gql`
+    query IsEmailUsed($email: String!) {
+  isEmailUsed(email: $email)
+}
+    `;
+
+/**
+ * __useIsEmailUsedQuery__
+ *
+ * To run a query within a React component, call `useIsEmailUsedQuery` and pass it any options that fit your needs.
+ * When your component renders, `useIsEmailUsedQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useIsEmailUsedQuery({
+ *   variables: {
+ *      email: // value for 'email'
+ *   },
+ * });
+ */
+export function useIsEmailUsedQuery(baseOptions: Apollo.QueryHookOptions<IsEmailUsedQuery, IsEmailUsedQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<IsEmailUsedQuery, IsEmailUsedQueryVariables>(IsEmailUsedDocument, options);
+      }
+export function useIsEmailUsedLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<IsEmailUsedQuery, IsEmailUsedQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<IsEmailUsedQuery, IsEmailUsedQueryVariables>(IsEmailUsedDocument, options);
+        }
+export type IsEmailUsedQueryHookResult = ReturnType<typeof useIsEmailUsedQuery>;
+export type IsEmailUsedLazyQueryHookResult = ReturnType<typeof useIsEmailUsedLazyQuery>;
+export type IsEmailUsedQueryResult = Apollo.QueryResult<IsEmailUsedQuery, IsEmailUsedQueryVariables>;
 export const LoginDocument = gql`
     mutation Login($password: String!, $email: String!) {
   login(password: $password, email: $email) {

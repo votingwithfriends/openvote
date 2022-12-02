@@ -11,7 +11,11 @@ import { User } from "../entities/User";
 import { hash, compare } from "bcrypt";
 import { Context } from "../types/Context";
 import { verify } from "jsonwebtoken";
-import { createAccessToken, createRefreshToken, sendRefreshToken } from "../auth";
+import {
+  createAccessToken,
+  createRefreshToken,
+  sendRefreshToken,
+} from "../auth";
 
 @ObjectType()
 class LoginResponse {
@@ -35,6 +39,17 @@ export class UserResolver {
   @Query(() => User)
   user(@Arg("id") id: number) {
     return User.findOne({ where: { id: id } });
+  }
+
+  // Check if email is in use
+  @Query(() => Boolean)
+  async isEmailUsed(@Arg("email") email: string) {
+    const user = await User.findOne({ where: { email } });
+    if (user) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   // Get current user
