@@ -31,7 +31,7 @@ export const Signup: React.FC = () => {
   }, [confirmPw]);
 
   return (
-    <div className="flex bg-slate-100 h-full flex-col justify-center items-center">
+    <div className="flex bg-blue-50 h-full flex-col justify-center items-center">
       <Link to={"/"}>
         <img className="h-12" src={logo} alt="openvote logo link" />
       </Link>
