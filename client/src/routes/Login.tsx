@@ -44,7 +44,7 @@ export const Login: React.FC = () => {
             if (response && response.data) {
               setAccessToken(response.data.login.accessToken);
             }
-            navigator("/");
+            navigator(`/profile/u/${response.data?.login.user.id}`);
           } catch (error) {
             setLoginError(true);
             setPassword("");
