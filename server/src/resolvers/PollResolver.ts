@@ -48,6 +48,17 @@ export class PollResolver {
     });
   }
 
+  // Poll by user (Temp)
+  // Delete once relationship has been fixed with User
+  @Query(() => [Poll], { nullable: true })
+  async pollByUser(@Arg("userId") userId: number) {
+    const polls = await Poll.find({ where: { userId } });
+    if (!polls) {
+      return null;
+    }
+    return polls;
+  }
+
   // get poll with choices
   @Query(() => Poll)
   getPollAndChoices(@Arg("id") id: number) {

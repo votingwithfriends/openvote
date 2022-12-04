@@ -33,6 +33,10 @@ export class User extends BaseEntity {
   tokenVersion: number;
 
   @OneToMany(() => Comment, (comment) => comment.user) comments: Comment[];
-  @OneToMany(() => Poll, (poll) => poll.user) polls: Poll[];
+
+  // @Field(() => [Poll], { nullable: true })
+  @OneToMany(() => Poll, (poll) => poll.user)
+  polls: Poll[];
+
   @OneToMany(() => Vote, (vote) => vote.user) votes: Vote[];
 }

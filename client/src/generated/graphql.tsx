@@ -174,6 +174,7 @@ export type Query = {
   isEmailUsed: Scalars['Boolean'];
   me?: Maybe<User>;
   poll: Poll;
+  pollByUser?: Maybe<Array<Poll>>;
   polls: Array<Poll>;
   user: User;
   users: Array<User>;
@@ -204,6 +205,11 @@ export type QueryIsEmailUsedArgs = {
 
 export type QueryPollArgs = {
   id: Scalars['Float'];
+};
+
+
+export type QueryPollByUserArgs = {
+  userId: Scalars['Float'];
 };
 
 
@@ -295,6 +301,13 @@ export type PollQueryVariables = Exact<{
 
 
 export type PollQuery = { __typename?: 'Query', poll: { __typename?: 'Poll', id: number, is_open: boolean, title: string, userId: number, comments: Array<{ __typename?: 'Comment', comment_text: string, id: number, userId: number }>, choices: Array<{ __typename?: 'Choice', title: string, id: number }> } };
+
+export type PollByUserQueryVariables = Exact<{
+  userId: Scalars['Float'];
+}>;
+
+
+export type PollByUserQuery = { __typename?: 'Query', pollByUser?: Array<{ __typename?: 'Poll', id: number, title: string, is_open: boolean }> | null };
 
 export type RegisterMutationVariables = Exact<{
   password: Scalars['String'];
@@ -604,6 +617,43 @@ export function usePollLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PollQ
 export type PollQueryHookResult = ReturnType<typeof usePollQuery>;
 export type PollLazyQueryHookResult = ReturnType<typeof usePollLazyQuery>;
 export type PollQueryResult = Apollo.QueryResult<PollQuery, PollQueryVariables>;
+export const PollByUserDocument = gql`
+    query PollByUser($userId: Float!) {
+  pollByUser(userId: $userId) {
+    id
+    title
+    is_open
+  }
+}
+    `;
+
+/**
+ * __usePollByUserQuery__
+ *
+ * To run a query within a React component, call `usePollByUserQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePollByUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePollByUserQuery({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function usePollByUserQuery(baseOptions: Apollo.QueryHookOptions<PollByUserQuery, PollByUserQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<PollByUserQuery, PollByUserQueryVariables>(PollByUserDocument, options);
+      }
+export function usePollByUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PollByUserQuery, PollByUserQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<PollByUserQuery, PollByUserQueryVariables>(PollByUserDocument, options);
+        }
+export type PollByUserQueryHookResult = ReturnType<typeof usePollByUserQuery>;
+export type PollByUserLazyQueryHookResult = ReturnType<typeof usePollByUserLazyQuery>;
+export type PollByUserQueryResult = Apollo.QueryResult<PollByUserQuery, PollByUserQueryVariables>;
 export const RegisterDocument = gql`
     mutation Register($password: String!, $email: String!, $username: String!) {
   register(password: $password, email: $email, username: $username) {
