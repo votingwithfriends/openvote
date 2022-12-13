@@ -171,8 +171,10 @@ export type Query = {
   comments: Array<Comment>;
   getFriendsBySourceId: Array<User>;
   getPollAndChoices: Poll;
+  isEmailUsed: Scalars['Boolean'];
   me?: Maybe<User>;
   poll: Poll;
+  pollByUser?: Maybe<Array<Poll>>;
   polls: Array<Poll>;
   user: User;
   users: Array<User>;
@@ -196,8 +198,18 @@ export type QueryGetPollAndChoicesArgs = {
 };
 
 
+export type QueryIsEmailUsedArgs = {
+  email: Scalars['String'];
+};
+
+
 export type QueryPollArgs = {
   id: Scalars['Float'];
+};
+
+
+export type QueryPollByUserArgs = {
+  userId: Scalars['Float'];
 };
 
 
@@ -258,6 +270,13 @@ export type DeleteChoiceMutationVariables = Exact<{
 
 export type DeleteChoiceMutation = { __typename?: 'Mutation', deleteChoice: { __typename?: 'Choice', title: string } };
 
+export type IsEmailUsedQueryVariables = Exact<{
+  email: Scalars['String'];
+}>;
+
+
+export type IsEmailUsedQuery = { __typename?: 'Query', isEmailUsed: boolean };
+
 export type LoginMutationVariables = Exact<{
   password: Scalars['String'];
   email: Scalars['String'];
@@ -282,6 +301,13 @@ export type PollQueryVariables = Exact<{
 
 
 export type PollQuery = { __typename?: 'Query', poll: { __typename?: 'Poll', id: number, is_open: boolean, title: string, userId: number, comments: Array<{ __typename?: 'Comment', comment_text: string, id: number, userId: number }>, choices: Array<{ __typename?: 'Choice', title: string, id: number }> } };
+
+export type PollByUserQueryVariables = Exact<{
+  userId: Scalars['Float'];
+}>;
+
+
+export type PollByUserQuery = { __typename?: 'Query', pollByUser?: Array<{ __typename?: 'Poll', id: number, title: string, is_open: boolean }> | null };
 
 export type RegisterMutationVariables = Exact<{
   password: Scalars['String'];
@@ -406,6 +432,39 @@ export function useDeleteChoiceMutation(baseOptions?: Apollo.MutationHookOptions
 export type DeleteChoiceMutationHookResult = ReturnType<typeof useDeleteChoiceMutation>;
 export type DeleteChoiceMutationResult = Apollo.MutationResult<DeleteChoiceMutation>;
 export type DeleteChoiceMutationOptions = Apollo.BaseMutationOptions<DeleteChoiceMutation, DeleteChoiceMutationVariables>;
+export const IsEmailUsedDocument = gql`
+    query IsEmailUsed($email: String!) {
+  isEmailUsed(email: $email)
+}
+    `;
+
+/**
+ * __useIsEmailUsedQuery__
+ *
+ * To run a query within a React component, call `useIsEmailUsedQuery` and pass it any options that fit your needs.
+ * When your component renders, `useIsEmailUsedQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useIsEmailUsedQuery({
+ *   variables: {
+ *      email: // value for 'email'
+ *   },
+ * });
+ */
+export function useIsEmailUsedQuery(baseOptions: Apollo.QueryHookOptions<IsEmailUsedQuery, IsEmailUsedQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<IsEmailUsedQuery, IsEmailUsedQueryVariables>(IsEmailUsedDocument, options);
+      }
+export function useIsEmailUsedLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<IsEmailUsedQuery, IsEmailUsedQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<IsEmailUsedQuery, IsEmailUsedQueryVariables>(IsEmailUsedDocument, options);
+        }
+export type IsEmailUsedQueryHookResult = ReturnType<typeof useIsEmailUsedQuery>;
+export type IsEmailUsedLazyQueryHookResult = ReturnType<typeof useIsEmailUsedLazyQuery>;
+export type IsEmailUsedQueryResult = Apollo.QueryResult<IsEmailUsedQuery, IsEmailUsedQueryVariables>;
 export const LoginDocument = gql`
     mutation Login($password: String!, $email: String!) {
   login(password: $password, email: $email) {
@@ -558,6 +617,43 @@ export function usePollLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PollQ
 export type PollQueryHookResult = ReturnType<typeof usePollQuery>;
 export type PollLazyQueryHookResult = ReturnType<typeof usePollLazyQuery>;
 export type PollQueryResult = Apollo.QueryResult<PollQuery, PollQueryVariables>;
+export const PollByUserDocument = gql`
+    query PollByUser($userId: Float!) {
+  pollByUser(userId: $userId) {
+    id
+    title
+    is_open
+  }
+}
+    `;
+
+/**
+ * __usePollByUserQuery__
+ *
+ * To run a query within a React component, call `usePollByUserQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePollByUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePollByUserQuery({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function usePollByUserQuery(baseOptions: Apollo.QueryHookOptions<PollByUserQuery, PollByUserQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<PollByUserQuery, PollByUserQueryVariables>(PollByUserDocument, options);
+      }
+export function usePollByUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PollByUserQuery, PollByUserQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<PollByUserQuery, PollByUserQueryVariables>(PollByUserDocument, options);
+        }
+export type PollByUserQueryHookResult = ReturnType<typeof usePollByUserQuery>;
+export type PollByUserLazyQueryHookResult = ReturnType<typeof usePollByUserLazyQuery>;
+export type PollByUserQueryResult = Apollo.QueryResult<PollByUserQuery, PollByUserQueryVariables>;
 export const RegisterDocument = gql`
     mutation Register($password: String!, $email: String!, $username: String!) {
   register(password: $password, email: $email, username: $username) {

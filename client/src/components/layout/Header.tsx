@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { Container } from "../Container";
-import { RiMenuLine, RiCloseLine } from "react-icons/ri";
+import { FiMenu, FiX } from "react-icons/fi";
 import { useLogoutMutation, useMeQuery } from "../../generated/graphql";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { setAccessToken } from "../../token";
-import React from "react";
+import logo from "../../assets/openvote.svg";
 
 export const Header: React.FC = () => {
   // Get user currently logged in
@@ -16,19 +16,21 @@ export const Header: React.FC = () => {
   // Mobile menu state
   const [mobileMenu, setMobileMenu] = useState<Boolean>(false);
 
+  const navigator = useNavigate();
+
   if (loading) {
     return <div>loading</div>;
   }
 
   return (
-    <header className="bg-black text-white relative">
+    <header className="relative">
       <Container>
         <nav className="flex justify-between items-center">
           <Link to="/" className="font-bold">
-            OpenVote
+            <img className="h-6" src={logo} alt="openvote logo" />
           </Link>
           <div className="md:hidden" onClick={() => setMobileMenu(true)}>
-            <RiMenuLine fontSize={26} />
+            <FiMenu fontSize={26} />
           </div>
           {data && data.me ? (
             <ul className="hidden md:flex flex-col">
@@ -47,6 +49,7 @@ export const Header: React.FC = () => {
                     await logout();
                     setAccessToken("");
                     await client.resetStore();
+                    navigator("/login");
                   }}
                 >
                   Logout
@@ -79,13 +82,13 @@ export const Header: React.FC = () => {
             className="inline-block ml-auto mb-12"
             onClick={() => setMobileMenu(false)}
           >
-            <RiCloseLine fontSize={40} />
+            <FiX fontSize={40} />
           </div>
           <div onClick={() => setMobileMenu(false)}>
             {data && data.me ? (
               <ul className="flex flex-col gap-y-6 font-bold">
                 <li>
-                  <Link className="text-3xl" to="/">
+                  <Link className="text-3xl" to={`/profile/u/${data.me.id}`}>
                     {data.me.username}
                   </Link>
                 </li>
@@ -95,6 +98,7 @@ export const Header: React.FC = () => {
                       await logout();
                       setAccessToken("");
                       await client.resetStore();
+                      navigator("/login");
                     }}
                   >
                     Logout

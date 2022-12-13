@@ -1,0 +1,3 @@
+query IsEmailUsed($email: String!) {
+  isEmailUsed(email: $email)
+}

@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { MeDocument, MeQuery, useLoginMutation } from "../generated/graphql";
 import { Form } from "../components/Form";
 import { InputField } from "../components/InputField";
+import logo from "../assets/openvote.svg";
 export const Login: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -13,7 +14,10 @@ export const Login: React.FC = () => {
   const navigator = useNavigate();
 
   return (
-    <section className="flex flex-col mt-24 justify-center items-center">
+    <div className="flex bg-blue-50 h-full flex-col justify-center items-center">
+      <Link to={"/"}>
+        <img className="h-12" src={logo} alt="openvote logo link" />
+      </Link>
       <Form
         title="Login"
         onSubmit={async (e) => {
@@ -40,24 +44,23 @@ export const Login: React.FC = () => {
             if (response && response.data) {
               setAccessToken(response.data.login.accessToken);
             }
-            navigator("/");
+            navigator(`/profile/u/${response.data?.login.user.id}`);
           } catch (error) {
             setLoginError(true);
             setPassword("");
           }
         }}
       >
-        <>
-          {loginError && (
-            <span className="text-rose-500">Incorrect email or password</span>
-          )}
-        </>
+        <p className="font-bold text-center h-5 text-rose-500">
+          {loginError ? "Invalid email or password" : ""}
+        </p>
         <InputField
           labelText="Email"
           id="email"
           type="email"
           value={email}
           required
+          autofocus
           onChange={(e) => setEmail(e.target.value)}
         />
         <InputField
@@ -68,16 +71,16 @@ export const Login: React.FC = () => {
           required
           onChange={(e) => setPassword(e.target.value)}
         />
-        <button className="bg-blue-700 rounded p-3 text-white" type="submit">
+        <button className="bg-black rounded-md p-4 text-white" type="submit">
           Login
         </button>
         <p className="text-sm text-center">
           Don't have an account?
-          <Link className="ml-2 underline text-blue-500" to="/signup">
+          <Link className="ml-2 underline text-teal-500" to="/signup">
             Create one
           </Link>
         </p>
       </Form>
-    </section>
+    </div>
   );
 };

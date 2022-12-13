@@ -1,17 +1,24 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useRegisterMutation } from "../generated/graphql";
+import {
+  useIsEmailUsedLazyQuery,
+  useRegisterMutation,
+} from "../generated/graphql";
 import { Form } from "../components/Form";
 import { InputField } from "../components/InputField";
 import { useLoginMutation, MeQuery, MeDocument } from "../generated/graphql";
 import { setAccessToken } from "../token";
+import logo from "../assets/openvote.svg";
 
 export const Signup: React.FC = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPw, setConfirmPw] = useState("");
+  const [checkEmail] = useIsEmailUsedLazyQuery();
+  const [dupEmailError, setDupEmailError] = useState(false);
+
   const [register] = useRegisterMutation();
 
   const [login] = useLoginMutation();
@@ -24,12 +31,15 @@ export const Signup: React.FC = () => {
   }, [confirmPw]);
 
   return (
-    <section className="flex flex-col mt-24 justify-center items-center">
+    <div className="flex bg-blue-50 h-full flex-col justify-center items-center">
+      <Link to={"/"}>
+        <img className="h-12" src={logo} alt="openvote logo link" />
+      </Link>
       <Form
         title="Create new account"
         onSubmit={async (e) => {
           e.preventDefault();
-          const response = await register({
+          await register({
             variables: {
               username,
               email,
@@ -57,54 +67,75 @@ export const Signup: React.FC = () => {
           if (loginRes && loginRes.data) {
             setAccessToken(loginRes.data.login.accessToken);
           }
-          navigator("/");
+          navigator(`/profile/u/${loginRes.data?.login.user.id}`);
         }}
       >
         <InputField
           labelText="Username"
           type="text"
           value={username}
+          autofocus
           onChange={(e) => setUsername(e.target.value)}
         />
         <InputField
           labelText="Email"
           type="email"
           value={email}
+          required
           onChange={(e) => setEmail(e.target.value)}
-        />
+          onBlur={async () => {
+            const { data } = await checkEmail({
+              variables: {
+                email,
+              },
+            });
+            if (data?.isEmailUsed) {
+              setDupEmailError(true);
+            } else {
+              setDupEmailError(false);
+            }
+          }}
+        >
+          <p className="text-rose-500 h-5 text-sm">
+            {dupEmailError ? "This email is already in use" : ""}
+          </p>
+        </InputField>
         <InputField
           labelText="Password"
           type="password"
           value={password}
+          required
           onChange={(e) => setPassword(e.target.value)}
         />
         <InputField
           labelText="Confirm password"
           type="password"
           value={confirmPw}
+          required
           onChange={(e) => setConfirmPw(e.target.value)}
-        />
-        <p className="text-rose-500">
-          {passwordsMatch ? "" : "Passwords do not match"}
-        </p>
+        >
+          <p className="text-rose-500 text-sm h-5">
+            {passwordsMatch ? "" : "Passwords do not match"}
+          </p>
+        </InputField>
         <button
-          disabled={!passwordsMatch || confirmPw === ""}
+          disabled={!passwordsMatch || confirmPw === "" || dupEmailError}
           className={`${
-            passwordsMatch && confirmPw !== ""
-              ? "bg-blue-700"
-              : "bg-neutral-600"
-          } p-3 rounded text-white`}
+            passwordsMatch && confirmPw !== "" && !dupEmailError
+              ? "bg-black"
+              : "bg-slate-300"
+          } p-4 rounded-md text-white`}
           type="submit"
         >
           Create Account
         </button>
         <p className="text-sm text-center">
           Already have an account?
-          <Link className="ml-2 text-blue-500 underline" to="/login">
+          <Link className="ml-2 text-teal-500 underline" to="/login">
             Log in
           </Link>
         </p>
       </Form>
-    </section>
+    </div>
   );
 };
