@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useUserQuery, useAddPollMutation } from "../generated/graphql";
+import { Layout } from "../components/layout";
 
 export const CreatePoll: React.FC = () => {
   const { userId } = useParams();
@@ -41,30 +42,34 @@ export const CreatePoll: React.FC = () => {
   };
 
   return (
-    <section>
-      <div className="flex justify-center">
-        <p className="font-bold text-3xl mb-4 ">
-          Name your poll {data?.user.username}
-        </p>
-      </div>
-      <div className="flex justify-center">
-        <form
-          className="bg-white w-full md:w-auto p-8 rounded-lg border-2 border-blue-500"
-          onSubmit={handleSubmit}
-        >
-          <div className="flex flex-col">
-            <label className="font-bold pb-2">Poll Title: </label>
-            <input
-              type="text"
-              name="title"
-              value={title}
-              onChange={handleChange}
-              className="mb-4"
-            />
-            <button className="bg-blue-700 p-2 text-white mt-2">Submit</button>
-          </div>
-        </form>
-      </div>
-    </section>
+    <Layout>
+      <section>
+        <div className="flex justify-center">
+          <p className="font-bold text-center text-3xl mb-4 ">
+            Name your poll {data?.user.username}
+          </p>
+        </div>
+        <div className="flex justify-center">
+          <form
+            className="bg-white w-full md:w-auto p-8 rounded-lg border-2 border-blue-500"
+            onSubmit={handleSubmit}
+          >
+            <div className="flex flex-col">
+              <label className="font-bold pb-2">Poll Title: </label>
+              <input
+                type="text"
+                name="title"
+                value={title}
+                onChange={handleChange}
+                className="mb-4"
+              />
+              <button className="bg-blue-700 p-2 text-white mt-2">
+                Submit
+              </button>
+            </div>
+          </form>
+        </div>
+      </section>
+    </Layout>
   );
 };

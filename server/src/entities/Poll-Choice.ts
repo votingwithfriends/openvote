@@ -31,6 +31,6 @@ export class Choice extends BaseEntity {
   poll: Poll;
 
   @Field(() => [Vote])
-  @OneToMany(() => Vote, (vote) => vote.choice)
+  @OneToMany(() => Vote, (vote) => vote.choice, { nullable: true })
   votes: Vote[];
 }

@@ -30,9 +30,11 @@ export class Vote extends BaseEntity {
   user: User;
 
   @Field()
-  @Column()
+  @Column({ nullable: true })
   @JoinColumn({ name: "choiceId" })
   choiceId: number;
-  @ManyToOne(() => Choice, (choice) => choice.votes)
+  @ManyToOne(() => Choice, (choice) => choice.votes, {
+    onDelete: "CASCADE",
+  })
   choice: Choice;
 }

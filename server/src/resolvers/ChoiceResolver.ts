@@ -7,13 +7,13 @@ export class ChoiceResolver {
   // read all choices
   @Query(() => [Choice])
   choices() {
-    return Choice.find();
+    return Choice.find({ relations: ["votes"] });
   }
 
   // read one choice by id
   @Query(() => Choice)
   choice(@Arg("id") id: number) {
-    return Choice.findOne({ where: { id: id } });
+    return Choice.findOne({ relations: ["votes"], where: { id } });
   }
 
   // Create a Choice
