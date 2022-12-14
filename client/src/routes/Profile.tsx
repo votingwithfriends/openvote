@@ -1,10 +1,15 @@
 import { Layout } from "../components/layout";
 import { useParams, Link } from "react-router-dom";
-import { FiPlus } from "react-icons/fi";
-import { useUserQuery, usePollByUserQuery } from "../generated/graphql";
+import { FiPlus, FiUsers } from "react-icons/fi";
+import {
+  useUserQuery,
+  usePollByUserQuery,
+  useMeQuery,
+} from "../generated/graphql";
 
 export const Profile: React.FC = () => {
   const { userId } = useParams();
+  const { data: meData } = useMeQuery();
   const { data, loading } = useUserQuery({
     variables: {
       userId: parseInt(userId!),
@@ -27,20 +32,28 @@ export const Profile: React.FC = () => {
 
   return (
     <Layout>
-      <div className="flex flex-col gap-y-6">
-        <section>
-          <p className="font-bold text-xl">{data?.user.username}</p>
+      <div className="flex mt-16 flex-col gap-y-6">
+        <section className="flex items-center">
+          <p className="font-bold text-3xl">{data?.user.username}</p>
+          {meData?.me?.id != userId && (
+            <p className="inline-flex ml-4 rounded-md text-indigo-50 items-center py-1 px-3 bg-indigo-400">
+              <FiUsers className="mr-2" />
+              Follow
+            </p>
+          )}
         </section>
         <section className="bg-blue-100 p-4 rounded-md">
           <div className="flex justify-between items-center mb-10">
             <h2 className="font-bold text-lg">Polls</h2>
-            <Link
-              className="bg-indigo-400 text-white p-2 rounded-md"
-              to={`/poll/cp/${userId}`}
-            >
-              Create new
-              <FiPlus className="inline-block" />
-            </Link>
+            {meData?.me?.id == userId && (
+              <Link
+                className="bg-indigo-400 text-white p-2 rounded-md"
+                to={`/poll/cp/${userId}`}
+              >
+                Create new
+                <FiPlus className="inline-block" />
+              </Link>
+            )}
           </div>
           <ul className="flex flex-col gap-y-6">
             {pollArr && pollArr.length > 0 ? (
