@@ -9,7 +9,7 @@ interface Props {
 
 export const Layout: React.FC<Props> = ({ children }) => {
   return (
-    <div className="font-google-fonts h-full bg-blue-50 grid grid-rows-[auto_1fr_auto]">
+    <div className="font-google-fonts min-h-full bg-blue-50 grid grid-rows-[auto_1fr_auto]">
       <Header />
       <main>
         <Container>{children}</Container>
