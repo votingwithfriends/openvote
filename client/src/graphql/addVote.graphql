@@ -1,0 +1,8 @@
+mutation addVote($choiceId: Float!, $userId: Float!, $value: Float!) {
+  addVote(choiceId: $choiceId, userId: $userId, value: $value) {
+    value
+    choiceId
+    userId
+    id
+  }
+}

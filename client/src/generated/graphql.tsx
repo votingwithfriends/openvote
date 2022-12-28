@@ -263,6 +263,15 @@ export type AddPollMutationVariables = Exact<{
 
 export type AddPollMutation = { __typename?: 'Mutation', addPoll: { __typename?: 'Poll', title: string, is_open: boolean, userId: number, id: number } };
 
+export type AddVoteMutationVariables = Exact<{
+  choiceId: Scalars['Float'];
+  userId: Scalars['Float'];
+  value: Scalars['Float'];
+}>;
+
+
+export type AddVoteMutation = { __typename?: 'Mutation', addVote: { __typename?: 'Vote', value: number, choiceId: number, userId: number, id: number } };
+
 export type DeleteChoiceMutationVariables = Exact<{
   id: Scalars['Float'];
 }>;
@@ -399,6 +408,44 @@ export function useAddPollMutation(baseOptions?: Apollo.MutationHookOptions<AddP
 export type AddPollMutationHookResult = ReturnType<typeof useAddPollMutation>;
 export type AddPollMutationResult = Apollo.MutationResult<AddPollMutation>;
 export type AddPollMutationOptions = Apollo.BaseMutationOptions<AddPollMutation, AddPollMutationVariables>;
+export const AddVoteDocument = gql`
+    mutation addVote($choiceId: Float!, $userId: Float!, $value: Float!) {
+  addVote(choiceId: $choiceId, userId: $userId, value: $value) {
+    value
+    choiceId
+    userId
+    id
+  }
+}
+    `;
+export type AddVoteMutationFn = Apollo.MutationFunction<AddVoteMutation, AddVoteMutationVariables>;
+
+/**
+ * __useAddVoteMutation__
+ *
+ * To run a mutation, you first call `useAddVoteMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddVoteMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addVoteMutation, { data, loading, error }] = useAddVoteMutation({
+ *   variables: {
+ *      choiceId: // value for 'choiceId'
+ *      userId: // value for 'userId'
+ *      value: // value for 'value'
+ *   },
+ * });
+ */
+export function useAddVoteMutation(baseOptions?: Apollo.MutationHookOptions<AddVoteMutation, AddVoteMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AddVoteMutation, AddVoteMutationVariables>(AddVoteDocument, options);
+      }
+export type AddVoteMutationHookResult = ReturnType<typeof useAddVoteMutation>;
+export type AddVoteMutationResult = Apollo.MutationResult<AddVoteMutation>;
+export type AddVoteMutationOptions = Apollo.BaseMutationOptions<AddVoteMutation, AddVoteMutationVariables>;
 export const DeleteChoiceDocument = gql`
     mutation deleteChoice($id: Float!) {
   deleteChoice(id: $id) {
